@@ -1,4 +1,4 @@
-# MonRDV (En cours de développement)
+# RDV (En cours de développement)
 
 Une application web pour la gestion de rendez-vous développée avec Next.js et TypeScript.
 
