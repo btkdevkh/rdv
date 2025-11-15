@@ -5,7 +5,7 @@ type PageContainerProps = {
 };
 
 const PageContainer = ({ children }: PageContainerProps) => {
-  return <main className="container mx-auto w-full p-3">{children}</main>;
+  return <main className="w-full p-3">{children}</main>;
 };
 
 export default PageContainer;

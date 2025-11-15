@@ -5,7 +5,7 @@ type PageWrapperProps = {
 };
 
 const PageWrapper = ({ children }: PageWrapperProps) => {
-  return <div className="flex min-h-screen dark:bg-[#fef2f6]">{children}</div>;
+  return <div className="flex dark:bg-[#D9D9D9]">{children}</div>;
 };
 
 export default PageWrapper;

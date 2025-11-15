@@ -5,7 +5,7 @@ type NavbarProps = {};
 
 const Navbar = ({}: NavbarProps) => {
   return (
-    <nav className="p-2 bg-[#fefeff] sticky top-0">
+    <nav className="py-2 px-3 bg-[#fefeff] sticky top-0 shadow">
       <div className="flex items-center justify-between">
         <Link href="/" className="flex items-center">
           <Image
@@ -13,9 +13,13 @@ const Navbar = ({}: NavbarProps) => {
             width={40}
             height={40}
             alt="logo"
-            className="z-1"
+            className="shadow rounded-xl"
           />
         </Link>
+
+        <div>
+          <Image src="/profile.png" width={45} height={45} alt="profile" />
+        </div>
       </div>
     </nav>
   );
