@@ -5,9 +5,9 @@ type NavbarProps = {};
 
 const Navbar = ({}: NavbarProps) => {
   return (
-    <nav className="py-2 px-3 bg-[#fefeff] sticky top-0 shadow">
+    <nav className="py-2 px-3 bg-white">
       <div className="flex items-center justify-between">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center gap-3">
           <Image
             src="/logo.png"
             width={40}
@@ -15,6 +15,10 @@ const Navbar = ({}: NavbarProps) => {
             alt="logo"
             className="shadow rounded-xl"
           />
+
+          <span className="text-black font-semibold uppercase border-b-2 border-[#D9D9D9]">
+            Daily SaaS
+          </span>
         </Link>
 
         <div>

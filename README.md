@@ -2,6 +2,8 @@
 
 Gestionnnaire de divers utilités développée avec Next.js et TypeScript.
 
+![Daily SaaS Dashboard](https://github.com/btkdevkh/daily-saas/blob/main/public/dashboard.png?raw=true)
+
 ## Technologies utilisées
 
 - Next.js

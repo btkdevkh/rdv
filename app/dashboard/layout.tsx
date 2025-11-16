@@ -1,22 +1,24 @@
+"use client";
+
 import LeftNavbar from "@/components/LeftNavbar";
 import Navbar from "@/components/Navbar";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 // Custom layout
-export default async function CreateRdvLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function CreateRdvLayout({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <>
-      <Navbar />
       <main className="bg-[#D9D9D9] min-h-screen flex justify-between">
         {/* Left Navbar */}
-        <LeftNavbar />
+        <LeftNavbar open={open} setOpen={setOpen} />
 
         {/* Children */}
-        <div className="w-[calc(100%-300px)]">{children}</div>
+        <div className={`${open ? "w-[calc(100%-300px)]" : "w-[calc(100%)]"}`}>
+          <Navbar />
+          {children}
+        </div>
       </main>
     </>
   );
