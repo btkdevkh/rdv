@@ -24,3 +24,28 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.fade {
+  animation: fade 0.2s ease-out forwards;
+}
+.fade-in {
+  animation: fadeIn 0.2s ease-in forwards;
+}
+
+@keyframes fade {
+  from {
+    transform: translateX(0.3rem);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateX(-0.3rem);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
