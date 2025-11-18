@@ -2,7 +2,8 @@
 
 Gestionnnaire de divers utilités développée avec Next.js et TypeScript.
 
-![Daily SaaS Login](https://github.com/btkdevkh/daily-saas/blob/main/public/login.png?raw=true)
+![Daily SaaS Login](https://github.com/btkdevkh/daily-saas/blob/main/public/login_v3.png?raw=true)
+![Daily SaaS Signup](https://github.com/btkdevkh/daily-saas/blob/main/public/signup_v1.png?raw=true)
 ![Daily SaaS Dashboard](https://github.com/btkdevkh/daily-saas/blob/main/public/dashboard_v2.png?raw=true)
 
 ## Technologies utilisées
