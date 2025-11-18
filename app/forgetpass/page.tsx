@@ -4,37 +4,23 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { loginUser } from "../../actions/auth/user";
-import { signIn } from "next-auth/react";
+import { forgetPass } from "@/actions/auth/user";
 
-export default function LoginPage() {
+export default function ForgetPassPage() {
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(formData: FormData) {
     const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
 
-    if (!email || !password) {
+    if (!email) {
       setError("Champs obligatoires");
       setMessage("");
       return;
     }
 
-    const data: { email: string; password: string } = {
-      email,
-      password,
-    };
-
-    const result = await loginUser(data);
-
-    // NextAuth
-    await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
+    const result = await forgetPass(email);
 
     if (result.error) {
       setError(result.error);
@@ -47,7 +33,8 @@ export default function LoginPage() {
       // Reset form
       const form = document.querySelector("form") as HTMLFormElement;
       form.reset();
-      router.push("/");
+
+      // router.push("/dashboard/resetpass");
     }
   }
 
@@ -66,15 +53,13 @@ export default function LoginPage() {
           <h2 className="text-4xl font-bold uppercase text-center">
             Daily SaaS
           </h2>
+
+          <p>
+            Mot de passe oublié ? Pas d'inquiétude, nous allons le retrouver !
+          </p>
         </div>
 
-        <br />
-
         <form action={handleSubmit} className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold uppercase text-center mb-3">
-            S'identifier
-          </h2>
-
           {message && (
             <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
               {message}
@@ -96,36 +81,19 @@ export default function LoginPage() {
             />
           </div>
 
-          <div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Mot de passe *"
-              className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
-
           <button
             type="submit"
             className="w-full mt-3 p-3 rounded shadow font-bold uppercase cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           >
-            S'identifier
+            Réinitialisation
           </button>
 
           <div className="flex justify-between items-center">
             <Link
-              href="/signup"
+              href="/login"
               className="text-blue-700 underline text-left text-xs"
             >
-              S'inscrire ?
-            </Link>
-
-            <Link
-              href="/forgetpass"
-              className="text-blue-700 underline text-xs"
-            >
-              Mot de passe oublié ?
+              Retour
             </Link>
           </div>
         </form>

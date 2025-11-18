@@ -8,13 +8,13 @@ const UserPage = async () => {
   return (
     <PageWrapper>
       <div className="p-3">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           {data.users && data.users.length === 0 ? (
             <div>
               <mark>Il n'y pas d'utilisateur.</mark>
             </div>
           ) : (
-            <span className="text-black font-semibold text-xl border-b-2 border-stormy-teal">
+            <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
               Utilisateurs
             </span>
           )}
@@ -25,16 +25,17 @@ const UserPage = async () => {
 
         <br />
 
-        <div className="grid md:grid-cols-6 gap-2 text-black">
+        <div className="grid md:grid-cols-4 gap-2 text-black">
           {data.users &&
             data.users.length > 0 &&
             data.users?.map((user) => (
               <div key={user.id} className="bg-white shadow p-3 rounded">
-                <p>Id: {user.id}</p>
+                <p>Prénom: {user.firstname}</p>
                 <p>
-                  {user.firstname} {user.lastname}
+                  NOM: <b>{user.lastname}</b>
                 </p>
                 <p>Email: {user.email}</p>
+                <p>Rôle: {user.role}</p>
               </div>
             ))}
         </div>

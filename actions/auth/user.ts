@@ -1,9 +1,9 @@
 "use server";
 
-import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import { prisma } from "@/lib/prisma";
 
-export async function loginUser(data: { email: string; password: string }) {
+const loginUser = async (data: { email: string; password: string }) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -25,4 +25,24 @@ export async function loginUser(data: { email: string; password: string }) {
   } catch (error) {
     return { error: "Une erreur s'est produit." };
   }
-}
+};
+
+const forgetPass = async (email: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      throw new Error("L'utilisateur n'existe pas");
+    }
+
+    return { message: "Utilisateur trouvé avec success", user };
+  } catch (error) {
+    return { error: "Une erreur s'est produit." };
+  }
+};
+
+export { loginUser, forgetPass };

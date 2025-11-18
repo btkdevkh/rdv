@@ -4,11 +4,15 @@ import Image from "next/image";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Authentification",
+  title: "Daily SaaS | Oublié le mot de passe",
 };
 
 // Custom layout
-export default function LoginLayout({ children }: { children: ReactNode }) {
+export default async function ForgetPassLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <PageWrapper>
       <div className="flex items-center">

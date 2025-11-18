@@ -15,6 +15,7 @@ export async function createUser(data: IUser) {
         lastname: data.lastname,
         email: data.email,
         password: hashedPassword,
+        role: data.role,
       },
     });
 

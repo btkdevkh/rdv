@@ -4,5 +4,5 @@ export interface IRdv {
   withWhom: string;
   date: string;
   address: string;
-  userId?: number;
+  userId: string;
 }

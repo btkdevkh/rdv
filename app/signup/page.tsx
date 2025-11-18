@@ -36,6 +36,7 @@ export default function SignupPage() {
       lastname,
       email,
       password,
+      role: "User",
     };
 
     const result = await createUser(data);
@@ -106,7 +107,7 @@ export default function SignupPage() {
               type="text"
               id="lastname"
               name="lastname"
-              placeholder="Nom *"
+              placeholder="NOM *"
               className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
             />
           </div>

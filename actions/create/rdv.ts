@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { IRdv } from "@/types/interfaces/IRdv";
 import { revalidatePath } from "next/cache";
 
-export async function createRdv(data: IRdv & { userId: number }) {
+export async function createRdv(data: IRdv & { userId: string }) {
   try {
     const rdv = await prisma.rdv.create({
       data: {

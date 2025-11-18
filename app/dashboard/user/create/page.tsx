@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import PageWrapper from "@/components/PageWrapper";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/actions/create/user";
 import { IUser } from "@/types/interfaces/IUser";
@@ -12,11 +11,30 @@ export default function CreateUserPage() {
   const [error, setError] = useState("");
 
   async function handleSubmit(formData: FormData) {
+    const firstname = formData.get("firstname") as string;
+    const lastname = formData.get("lastname") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirm-password") as string;
+
+    if (!firstname || !lastname || !email || !password || !confirmPassword) {
+      setError("Champs obligatoires");
+      setMessage("");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Les deux mots de passe ne sont pas les mêmes");
+      setMessage("");
+      return;
+    }
+
     const data: IUser = {
-      firstname: formData.get("firstname") as string,
-      lastname: formData.get("lastname") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      password: password,
+      role: "User",
     };
 
     const result = await createUser(data);
@@ -38,63 +56,80 @@ export default function CreateUserPage() {
   }
 
   return (
-    <PageWrapper>
-      <div className="md:w-lg mx-auto w-full p-4 text-black">
-        <form action={handleSubmit} className="space-y-4 p-6 rounded-md">
-          {message && (
-            <div className="bg-green-100 text-green-700 p-3 rounded-xl mb-4">
-              {message}
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded-xl mb-4">
-              {error}
-            </div>
-          )}
+    <div className="w-full text-graphite">
+      <form action={handleSubmit} className="flex flex-col gap-3">
+        <h2 className="text-xl font-bold mb-3 uppercase">
+          Créer un utilisateur
+        </h2>
 
-          <h2 className="text-xl">Créer un utilisateur</h2>
-
-          <div>
-            <input
-              type="text"
-              id="firstname"
-              name="firstname"
-              required
-              placeholder="Prénom"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
+        {message && (
+          <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {message}
           </div>
-
-          <div>
-            <input
-              type="text"
-              id="lastname"
-              name="lastname"
-              required
-              placeholder="Nom"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
+        )}
+        {error && (
+          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+            {error}
           </div>
+        )}
 
-          <div>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="Email"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
+        <div>
+          <input
+            type="text"
+            id="firstname"
+            name="firstname"
+            placeholder="Prénom *"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full p-3 rounded-xl shadow font-bold uppercase cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-          >
-            Créer
-          </button>
-        </form>
-      </div>
-    </PageWrapper>
+        <div>
+          <input
+            type="text"
+            id="lastname"
+            name="lastname"
+            placeholder="NOM *"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="Email *"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <div>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Mot de passe *"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <div>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            placeholder="Confirmer le mot de passe *"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase"
+        >
+          Valider
+        </button>
+      </form>
+    </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 
-export async function getUsers() {
+const getUsers = async () => {
   try {
     const users = await prisma.user.findMany();
 
@@ -10,9 +10,9 @@ export async function getUsers() {
   } catch (error) {
     return { error: "Une erreur s'est produit." };
   }
-}
+};
 
-export async function getUserById(id: number) {
+const getUserById = async (id: string) => {
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -24,4 +24,6 @@ export async function getUserById(id: number) {
   } catch (error) {
     return { error: "Une erreur s'est produit." };
   }
-}
+};
+
+export { getUsers, getUserById };

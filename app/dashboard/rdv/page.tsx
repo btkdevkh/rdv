@@ -14,7 +14,7 @@ const RdvPage = async () => {
               <mark>Il n'y pas de rendez-vous.</mark>
             </div>
           ) : (
-            <span className="text-black font-semibold text-xl border-b-2 border-stormy-teal">
+            <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
               Rdvs
             </span>
           )}
@@ -25,7 +25,7 @@ const RdvPage = async () => {
 
         <br />
 
-        <div className="grid md:grid-cols-6 gap-2 text-black">
+        <div className="grid md:grid-cols-4 gap-2 text-black">
           {data.rdvs &&
             data.rdvs.length > 0 &&
             data.rdvs.map((rdv) => (

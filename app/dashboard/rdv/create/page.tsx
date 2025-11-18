@@ -1,25 +1,23 @@
 "use client";
 
-import { use, useState } from "react";
+import { useState } from "react";
 import { createRdv } from "@/actions/create/rdv";
-import PageWrapper from "@/components/PageWrapper";
 import { useRouter } from "next/navigation";
-import { getUserById } from "@/actions/get/user";
+import { useSession } from "next-auth/react";
 
 export default function CreateRdvPage() {
+  const { data: session } = useSession();
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   async function handleSubmit(formData: FormData) {
-    const user = await getUserById(1);
-
     const data = {
       title: formData.get("title") as string,
       withWhom: formData.get("withWhom") as string,
       date: formData.get("date") as string,
       address: formData.get("address") as string,
-      userId: user.user?.id as number,
+      userId: session?.user.id as string,
     };
 
     const result = await createRdv(data);
@@ -41,73 +39,73 @@ export default function CreateRdvPage() {
   }
 
   return (
-    <PageWrapper>
-      <div className="md:w-lg mx-auto w-full p-4 text-black">
-        <form action={handleSubmit} className="space-y-4 p-6 rounded-md">
-          {message && (
-            <div className="bg-green-100 text-green-700 p-3 rounded-xl mb-4">
-              {message}
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded-xl mb-4">
-              {error}
-            </div>
-          )}
+    <div className="w-full text-graphite">
+      <form action={handleSubmit} className="flex flex-col gap-3">
+        <h2 className="text-xl font-bold mb-3 uppercase">
+          Créer un Rendez-vous
+        </h2>
 
-          <h2 className="text-xl">Créer un Rendez-vous</h2>
-
-          <div>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              required
-              placeholder="Chez"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
+        {message && (
+          <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
+            {message}
           </div>
-
-          <div>
-            <input
-              type="text"
-              id="withWhom"
-              name="withWhom"
-              required
-              placeholder="Avec"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
+        )}
+        {error && (
+          <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
+            {error}
           </div>
+        )}
 
-          <div>
-            <input
-              type="datetime-local"
-              id="date"
-              name="date"
-              required
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
+        <div>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            required
+            placeholder="Chez"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
 
-          <div>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              required
-              placeholder="Adresse"
-              className="w-full p-3 shadow bg-white rounded-xl outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
+        <div>
+          <input
+            type="text"
+            id="withWhom"
+            name="withWhom"
+            required
+            placeholder="Avec"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
 
-          <button
-            type="submit"
-            className="w-full p-3 rounded-xl shadow font-bold uppercase cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-          >
-            Créer
-          </button>
-        </form>
-      </div>
-    </PageWrapper>
+        <div>
+          <input
+            type="datetime-local"
+            id="date"
+            name="date"
+            required
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <div>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            required
+            placeholder="Adresse"
+            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full p-3 rounded shadow font-bold uppercase cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+        >
+          Valider
+        </button>
+      </form>
+    </div>
   );
 }
