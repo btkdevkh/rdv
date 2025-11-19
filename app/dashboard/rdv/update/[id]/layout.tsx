@@ -1,15 +1,14 @@
 import BackButton from "@/components/BackButton";
-import CreateButton from "@/components/CreateButton";
 import PageWrapper from "@/components/PageWrapper";
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Création RDV",
+  title: "Daily SaaS | Modification RDV",
 };
 
 // Custom layout
-export default async function CreateRdvLayout({
+export default async function UpdateRdvLayout({
   children,
 }: {
   children: ReactNode;
@@ -18,7 +17,7 @@ export default async function CreateRdvLayout({
     <PageWrapper>
       <div className="flex justify-between items-center p-3">
         <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-          Créer
+          Modifier
         </span>
 
         {/* Back button */}

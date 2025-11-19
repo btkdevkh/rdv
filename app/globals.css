@@ -41,7 +41,7 @@ body {
 
 @keyframes fadeOut {
   from {
-    transform: translateX(0.3rem);
+    transform: translateX(1rem);
   }
   to {
     transform: translateX(0);
@@ -50,7 +50,7 @@ body {
 
 @keyframes fadeIn {
   from {
-    transform: translateX(-0.3rem);
+    transform: translateX(-1rem);
   }
   to {
     transform: translateX(0);

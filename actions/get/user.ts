@@ -7,8 +7,14 @@ const getUsers = async () => {
     const users = await prisma.user.findMany();
 
     return { message: "Utilisateurs trouvés avec success", users };
-  } catch (error) {
-    return { error: "Une erreur s'est produit." };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 };
 
@@ -21,8 +27,14 @@ const getUserById = async (id: string) => {
     });
 
     return { message: "Utilisateur trouvé avec success", user };
-  } catch (error) {
-    return { error: "Une erreur s'est produit." };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 };
 

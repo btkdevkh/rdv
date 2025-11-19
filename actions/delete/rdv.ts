@@ -1,23 +1,18 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { IRdv } from "@/types/interfaces/IRdv";
 import { revalidatePath } from "next/cache";
 
-export async function createRdv(data: IRdv & { userId: string }) {
+export async function deleteRdv(rdvId: string) {
   try {
-    const rdv = await prisma.rdv.create({
-      data: {
-        title: data.title,
-        withWhom: data.withWhom,
-        date: data.date,
-        address: data.address,
-        userId: data.userId,
+    const rdv = await prisma.rdv.delete({
+      where: {
+        id: rdvId,
       },
     });
 
     revalidatePath("/");
-    return { message: "RDV created successfully", rdv };
+    return { message: "RDV deleted successfully", rdv };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };

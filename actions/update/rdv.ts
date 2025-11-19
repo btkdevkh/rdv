@@ -1,26 +1,29 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { IUser } from "@/types/interfaces/IUser";
+import { IRdv } from "@/types/interfaces/IRdv";
 import { revalidatePath } from "next/cache";
-import bcrypt from "bcrypt";
 
-export async function createUser(data: IUser) {
+export async function updateRdv(
+  data: IRdv & { userId: string },
+  rdvId: string
+) {
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    const user = await prisma.user.create({
+    const rdv = await prisma.rdv.update({
+      where: {
+        id: rdvId,
+      },
       data: {
-        firstname: data.firstname,
-        lastname: data.lastname,
-        email: data.email,
-        password: hashedPassword,
-        role: data.role,
+        title: data.title,
+        withWhom: data.withWhom,
+        date: data.date,
+        address: data.address,
+        userId: data.userId,
       },
     });
 
     revalidatePath("/");
-    return { message: "Utilisateur créé avec success", user };
+    return { message: "RDV modifié avec success", rdv };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };

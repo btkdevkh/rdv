@@ -2,6 +2,8 @@
 
 import bcrypt from "bcrypt";
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const loginUser = async (data: { email: string; password: string }) => {
   try {
@@ -12,18 +14,24 @@ const loginUser = async (data: { email: string; password: string }) => {
     });
 
     if (!user) {
-      throw new Error("L'utilisateur n'existe pas");
+      throw new Error("Identification inconnu.");
     }
 
     const matched = await bcrypt.compare(data.password, user.password);
 
     if (!matched) {
-      throw new Error("Le mot de passe incorrect");
+      throw new Error("Identification inconnu.");
     }
 
-    return { message: "Utilisateur trouvé avec success", user };
-  } catch (error) {
-    return { error: "Une erreur s'est produit." };
+    return { message: "Identification réussi", user };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 };
 
@@ -36,13 +44,39 @@ const forgetPass = async (email: string) => {
     });
 
     if (!user) {
-      throw new Error("L'utilisateur n'existe pas");
+      throw new Error("Identification inconnu.");
     }
 
-    return { message: "Utilisateur trouvé avec success", user };
-  } catch (error) {
-    return { error: "Une erreur s'est produit." };
+    return { message: "Identification réussi", user };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 };
 
-export { loginUser, forgetPass };
+const getConnectedUser = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      throw new Error("Identification inconnu.");
+    }
+
+    return { message: "Identification réussi", user: session.user };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
+  }
+};
+
+export { loginUser, forgetPass, getConnectedUser };

@@ -7,7 +7,6 @@ export async function proxy(request: NextRequest) {
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
   });
-  // console.log("session", token);
 
   const url = request.nextUrl.clone();
 
