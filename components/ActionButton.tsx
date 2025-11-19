@@ -2,18 +2,18 @@
 
 import { ReactNode } from "react";
 
-type DeleteButtonProps = {
+type ActionButtonProps = {
   children: ReactNode;
   id: string;
   handler: (id: string) => void;
 };
 
-const DeleteButton = ({ children, id, handler }: DeleteButtonProps) => {
+const ActionButton = ({ children, id, handler }: ActionButtonProps) => {
   return (
     <button
       type="submit"
       title="Supprimer"
-      className="absolute top-2 right-2 cursor-pointer bg-[rgb(0,0,0,0.1)] hover:bg-[rgb(0,0,0,0.3)] rounded-full p-2 transition"
+      className="cursor-pointer"
       onClick={() => {
         if (confirm("Souhaitez-vous continuer ?")) {
           handler(id);
@@ -25,4 +25,4 @@ const DeleteButton = ({ children, id, handler }: DeleteButtonProps) => {
   );
 };
 
-export default DeleteButton;
+export default ActionButton;

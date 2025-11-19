@@ -1,17 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { createRdv } from "@/actions/create/rdv";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { updateRdv } from "@/actions/update/rdv";
+import { IRdv } from "@/types/interfaces/IRdv";
+import { getRdvById } from "@/actions/get/rdv";
 
-export default function CreateRdvPage() {
+export default function UpdateRdvPage() {
   const { data: session } = useSession();
+
+  const params = useParams();
+  const rdvId = params.id as string;
+
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [rdv, setRdv] = useState<IRdv | null>(null);
+
+  useEffect(() => {
+    getRdvById(rdvId).then((data) => setRdv(data.rdv as IRdv));
+  }, [rdvId]);
 
   async function handleSubmit(formData: FormData) {
+    if (!confirm("Souhaitez-vous continuer ?")) return;
+
     const data = {
       title: formData.get("title") as string,
       withWhom: formData.get("withWhom") as string,
@@ -20,7 +33,7 @@ export default function CreateRdvPage() {
       userId: session?.user.id as string,
     };
 
-    const result = await createRdv(data);
+    const result = await updateRdv(data, rdvId);
 
     if (result.error) {
       setError(result.error);
@@ -42,7 +55,7 @@ export default function CreateRdvPage() {
     <div className="w-full text-graphite">
       <form action={handleSubmit} className="flex flex-col gap-3">
         <h2 className="text-xl font-bold mb-3 uppercase">
-          Créer un Rendez-vous
+          Modifier un Rendez-vous
         </h2>
 
         {message && (
@@ -62,6 +75,7 @@ export default function CreateRdvPage() {
             id="title"
             name="title"
             required
+            defaultValue={rdv?.title}
             placeholder="Titre de RDV"
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
@@ -73,6 +87,7 @@ export default function CreateRdvPage() {
             id="withWhom"
             name="withWhom"
             required
+            defaultValue={rdv?.withWhom}
             placeholder="Avec qui ?"
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
@@ -84,6 +99,7 @@ export default function CreateRdvPage() {
             id="date"
             name="date"
             required
+            defaultValue={rdv?.date}
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
         </div>
@@ -94,6 +110,7 @@ export default function CreateRdvPage() {
             id="address"
             name="address"
             required
+            defaultValue={rdv?.address}
             placeholder="Adresse de RDV"
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />

@@ -13,7 +13,13 @@ export async function deleteUser(userId: string) {
 
     revalidatePath("/");
     return { message: "User deleted successfully", user };
-  } catch (error) {
-    return { error: "Failed to deleted User" };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 }

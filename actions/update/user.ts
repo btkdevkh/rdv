@@ -3,24 +3,23 @@
 import { prisma } from "@/lib/prisma";
 import { IUser } from "@/types/interfaces/IUser";
 import { revalidatePath } from "next/cache";
-import bcrypt from "bcrypt";
 
-export async function createUser(data: IUser) {
+export async function updateUser(data: IUser, userId: string) {
   try {
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
-    const user = await prisma.user.create({
+    const user = await prisma.user.update({
+      where: {
+        id: userId,
+      },
       data: {
         firstname: data.firstname,
         lastname: data.lastname,
         email: data.email,
-        password: hashedPassword,
         role: data.role,
       },
     });
 
     revalidatePath("/");
-    return { message: "Utilisateur créé avec success", user };
+    return { message: "Utilisateur modifié avec success", user };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };

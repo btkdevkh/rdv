@@ -1,18 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createUser } from "@/actions/create/user";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { IUser } from "@/types/interfaces/IUser";
 import { useSession } from "next-auth/react";
+import { getUserById } from "@/actions/get/user";
+import { updateUser } from "@/actions/update/user";
 
-export default function CreateUserPage() {
+export default function UpdateUserPage() {
   const { data: session } = useSession();
+
+  const params = useParams();
+  const userId = params.id as string;
+
   const router = useRouter();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [user, setUser] = useState<IUser | null>(null);
+
+  useEffect(() => {
+    getUserById(userId).then((data) => setUser(data.user as IUser));
+  }, [userId]);
 
   async function handleSubmit(formData: FormData) {
+    if (!confirm("Souhaitez-vous continuer ?")) return;
+
     const firstname = formData.get("firstname") as string;
     const lastname = formData.get("lastname") as string;
     const email = formData.get("email") as string;
@@ -20,7 +32,7 @@ export default function CreateUserPage() {
     const confirmPassword = formData.get("confirm-password") as string;
     const role = formData.get("role") as string;
 
-    if (!firstname || !lastname || !email || !password || !confirmPassword) {
+    if (!firstname || !lastname || !email) {
       setError("Champs obligatoires");
       setMessage("");
       return;
@@ -40,7 +52,7 @@ export default function CreateUserPage() {
       role: role ?? "User",
     };
 
-    const result = await createUser(data);
+    const result = await updateUser(data, userId);
 
     if (result.error) {
       setError(result.error);
@@ -62,7 +74,7 @@ export default function CreateUserPage() {
     <div className="w-full text-graphite">
       <form action={handleSubmit} className="flex flex-col gap-3">
         <h2 className="text-xl font-bold mb-3 uppercase">
-          Créer un utilisateur
+          Modifier un utilisateur
         </h2>
 
         {message && (
@@ -82,6 +94,7 @@ export default function CreateUserPage() {
             id="firstname"
             name="firstname"
             placeholder="Prénom *"
+            defaultValue={user?.firstname}
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
         </div>
@@ -92,6 +105,7 @@ export default function CreateUserPage() {
             id="lastname"
             name="lastname"
             placeholder="NOM *"
+            defaultValue={user?.lastname}
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
         </div>
@@ -102,35 +116,17 @@ export default function CreateUserPage() {
             id="email"
             name="email"
             placeholder="Email *"
+            defaultValue={user?.email}
             className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
           />
         </div>
 
-        <div>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Mot de passe *"
-            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-          />
-        </div>
-
-        <div>
-          <input
-            type="password"
-            id="confirm-password"
-            name="confirm-password"
-            placeholder="Confirmer le mot de passe *"
-            className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-          />
-        </div>
-
-        {session?.user.role === "Admin" && (
+        {user && session?.user.role === "Admin" && (
           <div>
             <select
               id="role"
               name="role"
+              defaultValue={user.role}
               className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
             >
               <option value="User">User</option>

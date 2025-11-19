@@ -18,7 +18,13 @@ export async function createRdv(data: IRdv & { userId: string }) {
 
     revalidatePath("/");
     return { message: "RDV created successfully", rdv };
-  } catch (error) {
-    return { error: "Failed to create RDV" };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
   }
 }

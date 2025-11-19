@@ -2,21 +2,21 @@
 
 import { useRouter } from "next/navigation";
 
-type CreateButtonProps = {
-  page: string;
+type BackButtonProps = {
+  url?: string;
 };
 
-const CreateButton = ({ page }: CreateButtonProps) => {
+const BackButton = ({ url }: BackButtonProps) => {
   const router = useRouter();
 
   return (
     <button
       className="bg-yale-blue py-2 px-6 rounded font-semibold cursor-pointer uppercase"
-      onClick={() => router.push(`/dashboard/${page}/create`)}
+      onClick={() => router.back()}
     >
-      Créer
+      Retour
     </button>
   );
 };
 
-export default CreateButton;
+export default BackButton;
