@@ -55,7 +55,11 @@ const UserPage = async () => {
               </div>
 
               <div className="absolute top-2 right-2 flex flex-col gap-2">
-                <ActionButton id={user.id} handler={deleteUser}>
+                <ActionButton
+                  id={user.id}
+                  data={data.users}
+                  handler={deleteUser}
+                >
                   <div className="bg-[rgb(0,0,0,0.1)] hover:bg-[rgb(0,0,0,0.3)] rounded-full p-2 transition">
                     <RiDeleteBin6Line size={20} color="crimson" />
                   </div>

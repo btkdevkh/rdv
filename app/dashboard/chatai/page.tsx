@@ -1,41 +1,27 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import axios from "axios";
-import { HashLoader } from "react-spinners";
+import { useActionState, useEffect, useRef } from "react";
 import BackButton from "@/components/BackButton";
-
-const API_URL = process.env.NEXT_PUBLIC_CHAT_AI_API_URL!;
+import { createChatAi } from "@/actions/post/chatai";
+import { HashLoader } from "react-spinners";
 
 const ChatAiPage = () => {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const msgContainer = useRef<HTMLDivElement | null>(null);
+  const [state, formAction, isPending] = useActionState(createChatAi, {
+    message: "",
+    messages: [],
+    questions: [],
+    error: "",
+  });
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setInput("");
-
-    if (!input) {
-      return alert("Veuillez entrer un message.");
+  useEffect(() => {
+    if (state.messages.length > 0) {
+      msgContainer?.current?.scrollTo({
+        top: msgContainer.current?.scrollHeight,
+        behavior: "smooth",
+      });
     }
-
-    const userMessage = { sender: "user", text: input };
-    setMessages([...messages, userMessage]);
-
-    setLoading(true);
-    const res = await axios.post(API_URL, {
-      message: input,
-      replyHistory: messages,
-    });
-
-    const botMessage = { sender: "bot", text: res.data.answer };
-
-    setMessages((prev) => [...prev, botMessage]);
-    setLoading(false);
-  };
+  }, [state.messages.length]);
 
   return (
     <div className="p-3">
@@ -49,65 +35,73 @@ const ChatAiPage = () => {
 
       <div
         className={`${
-          messages.length === 0 ? "max-w-[515px]" : ""
+          state.messages.length === 0 ? "max-w-[515px]" : ""
         } mx-auto text-graphite`}
       >
-        <div className="md:flex md:gap-5">
-          {messages.length > 0 && (
-            <div className="bg-white rounded px-4 py-5 max-h-[87vh] h-full flex-1 mb-5 overflow-y-auto">
-              {/* Historique des questions */}
+        <div className="md:flex md:gap-5 overflow-y-auto">
+          {/* Historique des questions */}
+          {state.questions.length > 0 && (
+            <div className="bg-white rounded p-5 max-h-[87vh] h-full flex-1 mb-5 overflow-y-auto">
               <h2 className="text-2xl mb-5">Historique des questions</h2>
               <div className="flex flex-col gap-2">
-                {messages
-                  .filter((msg) => msg.sender === "user")
-                  .map((msg, i) => (
+                {state.questions
+                  .filter((q) => q.sender === "user")
+                  .map((q, i) => (
                     <span key={i} className="bg-dust-grey p-2 rounded w-fit">
-                      {msg.text}
+                      {q.text}
                     </span>
                   ))}
               </div>
             </div>
           )}
 
-          <div className="w-full mx-auto flex flex-col gap-3 flex-3">
-            {messages.length === 0 && (
+          <div
+            className="w-full h-[85vh] mx-auto flex flex-col gap-5 flex-3 overflow-y-auto"
+            ref={msgContainer}
+          >
+            {state.messages.length === 0 && (
               <h2 className="text-3xl mb-5">
                 Bonjour, comment puis-je vous aider ?
               </h2>
             )}
 
-            <div className="flex flex-col gap-3">
-              {messages.map((msg, i) => (
-                <div key={i} id={msg.text.split(" ").join("-")}>
-                  <p
-                    className={`wrap-anywhere ${
-                      msg.sender === "user"
-                        ? "bg-white p-2 rounded w-fit"
-                        : "p-1"
-                    }`}
-                  >
-                    {msg.text}
+            <div className="flex flex-col gap-5">
+              {state.messages.map((msg, i) => (
+                <div
+                  key={i}
+                  id={msg.text.split(" ").join("-")}
+                  className="flex flex-col gap-3"
+                >
+                  <p className="bg-white p-2 rounded w-fit">
+                    {state.questions[i].text}{" "}
                   </p>
+                  <p className="wrap-anywhere">{msg.text}</p>
                 </div>
               ))}
             </div>
 
             <form
+              action={formAction}
               className="flex justify-center items-center relative"
-              onSubmit={handleSubmit}
             >
               <input
                 type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                name="question"
                 placeholder="Posez une question..."
                 className="w-full p-2 border-2 border-yale-blue focus:border-stormy-teal outline-none rounded-2xl"
               />
-              <span
-                className={`bg-yale-blue text-white text-sm p-2 rounded-xl font-semibold cursor-pointer hover:bg-stormy-teal transition uppercase absolute right-1`}
+
+              <button
+                type="submit"
+                disabled={isPending}
+                className="bg-yale-blue text-white text-sm p-2 rounded-xl font-semibold hover:bg-stormy-teal transition uppercase absolute right-1"
               >
-                {loading ? <HashLoader size={20} color="#37d7b7" /> : "Chatter"}
-              </span>
+                {isPending ? (
+                  <HashLoader size={20} color="#37d7b7" />
+                ) : (
+                  "Chatter"
+                )}
+              </button>
             </form>
           </div>
         </div>

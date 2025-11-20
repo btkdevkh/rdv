@@ -12,7 +12,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <PageWrapper>
       <title>Daily SaaS | Tableau de bord</title>
-      <main className="bg-dust-grey flex justify-between">
+      <div className="bg-dust-grey flex justify-between">
         {/* Left Navbar */}
         <LeftNavbar open={open} setOpen={setOpen} />
 
@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <Navbar open={open} />
           {children}
         </div>
-      </main>
+      </div>
     </PageWrapper>
   );
 }
