@@ -1,40 +1,37 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import axios from "axios";
-import { HashLoader } from "react-spinners";
+import { useState } from "react";
 import BackButton from "@/components/BackButton";
-
-const API_URL = process.env.NEXT_PUBLIC_CHAT_AI_API_URL!;
+import { createChatAi } from "@/actions/post/chatai";
+import { IChatai } from "@/types/interfaces/IChatai";
+import SubmitButton from "@/components/SubmitButton";
 
 const ChatAiPage = () => {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<IChatai[]>([]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setInput("");
+  const handleSubmit = async (formData: FormData) => {
+    const question = formData.get("question") as string;
 
-    if (!input) {
+    if (!question) {
       return alert("Veuillez entrer un message.");
     }
 
-    const userMessage = { sender: "user", text: input };
+    const userMessage = { sender: "user", text: question };
     setMessages([...messages, userMessage]);
 
-    setLoading(true);
-    const res = await axios.post(API_URL, {
-      message: input,
+    const result = await createChatAi({
+      message: question,
       replyHistory: messages,
     });
 
-    const botMessage = { sender: "bot", text: res.data.answer };
-
-    setMessages((prev) => [...prev, botMessage]);
-    setLoading(false);
+    if (result.error) {
+      console.log(result.error);
+      window.alert(result.error);
+    } else {
+      if (result.botMessage) {
+        setMessages((prev) => [...prev, result.botMessage]);
+      }
+    }
   };
 
   return (
@@ -53,9 +50,9 @@ const ChatAiPage = () => {
         } mx-auto text-graphite`}
       >
         <div className="md:flex md:gap-5">
+          {/* Historique des questions */}
           {messages.length > 0 && (
             <div className="bg-white rounded px-4 py-5 max-h-[87vh] h-full flex-1 mb-5 overflow-y-auto">
-              {/* Historique des questions */}
               <h2 className="text-2xl mb-5">Historique des questions</h2>
               <div className="flex flex-col gap-2">
                 {messages
@@ -93,21 +90,17 @@ const ChatAiPage = () => {
             </div>
 
             <form
+              action={handleSubmit}
               className="flex justify-center items-center relative"
-              onSubmit={handleSubmit}
             >
               <input
                 type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                name="question"
                 placeholder="Posez une question..."
                 className="w-full p-2 border-2 border-yale-blue focus:border-stormy-teal outline-none rounded-2xl"
               />
-              <span
-                className={`bg-yale-blue text-white text-sm p-2 rounded-xl font-semibold cursor-pointer hover:bg-stormy-teal transition uppercase absolute right-1`}
-              >
-                {loading ? <HashLoader size={20} color="#37d7b7" /> : "Chatter"}
-              </span>
+
+              <SubmitButton title="Chatter" />
             </form>
           </div>
         </div>
