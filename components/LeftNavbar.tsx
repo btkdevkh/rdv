@@ -4,12 +4,10 @@ import { usePathname } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { IoCalendarNumberSharp } from "react-icons/io5";
 import { MdOutlinePassword } from "react-icons/md";
-import { MdMovie } from "react-icons/md";
 import { RiRobot2Fill } from "react-icons/ri";
 import { FaUsers } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
 import { signOut, useSession } from "next-auth/react";
-import { FaGuitar } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 type LeftNavbarProps = {
@@ -118,7 +116,7 @@ const MENU = [
   },
   {
     id: 2,
-    title: "Rendez-vous",
+    title: "Gestion des rendez-vous",
     pathname: "/dashboard/rdv",
     show: false,
     icon: <IoCalendarNumberSharp size={ICON_SIZE} color="#353535" />,
@@ -127,32 +125,15 @@ const MENU = [
   },
   {
     id: 3,
-    title: "iPass",
+    title: "Gestion des mots de passe",
     pathname: "/dashboard/ipass",
     show: false,
     icon: <MdOutlinePassword size={ICON_SIZE} color="#353535" />,
     iconActive: <MdOutlinePassword size={ICON_SIZE} color="#3C6E71" />,
+    access: "User",
   },
   {
     id: 4,
-    title: "Glass Music Player",
-    pathname: "/dashboard/glassmusicplayer",
-    show: false,
-    icon: <FaGuitar size={ICON_SIZE} color="#353535" />,
-    iconActive: <FaGuitar size={ICON_SIZE} color="#3C6E71" />,
-    access: "User",
-  },
-  {
-    id: 5,
-    title: "Ciné SnooZzzz",
-    pathname: "/dashboard/cinesnoozzz",
-    show: false,
-    icon: <MdMovie size={ICON_SIZE} color="#353535" />,
-    iconActive: <MdMovie size={ICON_SIZE} color="#3C6E71" />,
-    access: "User",
-  },
-  {
-    id: 6,
     title: "Chat AI",
     pathname: "/dashboard/chatai",
     show: false,
