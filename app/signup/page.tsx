@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/types/interfaces/IUser";
-import { createUser } from "../../actions/create/user";
+import { createUser } from "../../actions/post/user";
 
 export default function SignupPage() {
   const router = useRouter();

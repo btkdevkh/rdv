@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createUser } from "@/actions/create/user";
+import { createUser } from "@/actions/post/user";
 import { IUser } from "@/types/interfaces/IUser";
 import { useSession } from "next-auth/react";
 

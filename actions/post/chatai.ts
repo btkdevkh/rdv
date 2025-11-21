@@ -11,13 +11,12 @@ const createChatAi = async (prevState: IChaitaiAsk, formData: FormData) => {
 
     // User's question
     const userQuestion = { sender: "user", text: question };
-    const questionHistories = [...prevState.questions, userQuestion];
+    const questions = [...prevState.questions, userQuestion];
 
     // Data structure matched with API endpoint
-    // @todo: change "replyHistory" to "questionHistories" on external backend-app
     const data = {
       message: question,
-      replyHistory: questionHistories,
+      questions: questions,
     };
 
     const res = await axios.post(API_URL, data);
@@ -36,7 +35,7 @@ const createChatAi = async (prevState: IChaitaiAsk, formData: FormData) => {
     return {
       message: "Le bot a répondu avec success",
       messages,
-      questions: questionHistories,
+      questions,
     };
   } catch (err) {
     if (err instanceof SyntaxError) {

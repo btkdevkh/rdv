@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef } from "react";
 import BackButton from "@/components/BackButton";
 import { createChatAi } from "@/actions/post/chatai";
 import { HashLoader } from "react-spinners";
+import { RiRobot2Fill } from "react-icons/ri";
 
 import rehypeHighlight from "rehype-highlight";
 import ReactMarkdown from "react-markdown";
@@ -13,6 +14,8 @@ import "highlight.js/styles/atom-one-dark.css";
 
 const ChatAiPage = () => {
   const msgContainer = useRef<HTMLDivElement | null>(null);
+  const textareaRef = useRef<HTMLInputElement | null>(null);
+
   const [state, formAction, isPending] = useActionState(createChatAi, {
     message: "",
     messages: [],
@@ -69,7 +72,7 @@ const ChatAiPage = () => {
             ref={msgContainer}
           >
             {state.messages.length === 0 && (
-              <h2 className="text-[2.1rem] text-center">
+              <h2 className="text-[2.1rem]">
                 Bonjour, comment puis-je vous aider ?
               </h2>
             )}
@@ -126,26 +129,23 @@ const ChatAiPage = () => {
 
             <form
               action={formAction}
-              className="flex justify-center items-center relative"
+              className="flex flex-col justify-center items-center gap-0.5"
             >
-              <input
-                type="text"
-                name="question"
-                placeholder="Posez une question..."
-                className="w-full p-2 border-2 border-yale-blue focus:border-stormy-teal outline-none rounded-2xl"
-              />
-
-              <button
-                type="submit"
-                disabled={isPending}
-                className="bg-yale-blue text-white text-sm p-2 rounded-xl font-semibold hover:bg-stormy-teal transition uppercase absolute right-1"
-              >
-                {isPending ? (
-                  <HashLoader size={20} color="#37d7b7" />
-                ) : (
-                  "Chatter"
-                )}
-              </button>
+              <div className="w-full relative">
+                <input
+                  name="question"
+                  placeholder="Posez une question..."
+                  className="w-full max-h-[150px] p-2 bg-white focus:bg-none border-2 border-yale-blue focus:border-stormy-teal outline-none rounded-lg"
+                />
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="p-1 hover:bg-white transition rounded-lg cursor-pointer absolute top-1.5 right-1.5"
+                >
+                  {isPending && <HashLoader size={25} color="#36d7b7" />}
+                  {!isPending && <RiRobot2Fill size={25} color="#36d7b7" />}
+                </button>
+              </div>
             </form>
           </div>
         </div>
