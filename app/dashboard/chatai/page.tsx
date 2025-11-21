@@ -5,6 +5,10 @@ import BackButton from "@/components/BackButton";
 import { createChatAi } from "@/actions/post/chatai";
 import { HashLoader } from "react-spinners";
 
+import rehypeHighlight from "rehype-highlight";
+import ReactMarkdown from "react-markdown";
+import "highlight.js/styles/github.css";
+
 const ChatAiPage = () => {
   const msgContainer = useRef<HTMLDivElement | null>(null);
   const [state, formAction, isPending] = useActionState(createChatAi, {
@@ -41,13 +45,13 @@ const ChatAiPage = () => {
         <div className="md:flex md:gap-5 overflow-y-auto">
           {/* Historique des questions */}
           {state.questions.length > 0 && (
-            <div className="bg-white rounded p-5 max-h-[87vh] h-full flex-1 mb-5 overflow-y-auto">
+            <div className="bg-white p-5 max-h-[87vh] h-full flex-1 mb-5 overflow-y-auto">
               <h2 className="text-2xl mb-5">Historique des questions</h2>
               <div className="flex flex-col gap-2">
                 {state.questions
                   .filter((q) => q.sender === "user")
                   .map((q, i) => (
-                    <span key={i} className="bg-dust-grey p-2 rounded w-fit">
+                    <span key={i} className="bg-dust-grey p-2">
                       {q.text}
                     </span>
                   ))}
@@ -56,11 +60,11 @@ const ChatAiPage = () => {
           )}
 
           <div
-            className="w-full h-[85vh] mx-auto flex flex-col gap-5 flex-3 overflow-y-auto"
+            className="w-full h-[85vh] mx-auto flex flex-col gap-5 flex-3 overflow-y-auto px-3"
             ref={msgContainer}
           >
             {state.messages.length === 0 && (
-              <h2 className="text-3xl mb-5">
+              <h2 className="text-[1.8rem]">
                 Bonjour, comment puis-je vous aider ?
               </h2>
             )}
@@ -72,10 +76,13 @@ const ChatAiPage = () => {
                   id={msg.text.split(" ").join("-")}
                   className="flex flex-col gap-3"
                 >
-                  <p className="bg-white p-2 rounded w-fit">
+                  <p className="bg-white p-2 w-fit">
                     {state.questions[i].text}{" "}
                   </p>
-                  <p className="wrap-anywhere">{msg.text}</p>
+
+                  <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+                    {msg.text}
+                  </ReactMarkdown>
                 </div>
               ))}
             </div>
