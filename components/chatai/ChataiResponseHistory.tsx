@@ -5,11 +5,11 @@ import { FaCopy } from "react-icons/fa";
 import { Chatai } from "@prisma/client";
 import "highlight.js/styles/atom-one-dark.css";
 
-type ChataiUserHistoryProps = {
+type ChataiResponseHistoryProps = {
   messages: Chatai[];
 };
 
-const ChataiUserHistory = ({ messages }: ChataiUserHistoryProps) => {
+const ChataiResponseHistory = ({ messages }: ChataiResponseHistoryProps) => {
   return (
     <>
       {messages.map((msg, i) => (
@@ -57,4 +57,4 @@ const ChataiUserHistory = ({ messages }: ChataiUserHistoryProps) => {
   );
 };
 
-export default ChataiUserHistory;
+export default ChataiResponseHistory;

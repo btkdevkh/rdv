@@ -5,8 +5,8 @@ import { Chatai } from "@prisma/client";
 import { HashLoader } from "react-spinners";
 import { RiRobot2Fill } from "react-icons/ri";
 import { createChatAi } from "@/actions/post/chatai";
-import ChataiBotHistory from "@/components/chatai/ChataiBotHistory";
-import ChataiUserHistory from "@/components/chatai/ChataiUserHistory";
+import ChataiQuestionHistory from "@/components/chatai/ChataiQuestionHistory";
+import ChataiResponseHistory from "@/components/chatai/ChataiResponseHistory";
 
 type ChataiFormProps = {
   messages: Chatai[];
@@ -39,7 +39,7 @@ const ChataiForm = ({ messages }: ChataiFormProps) => {
       >
         <div className="md:flex md:gap-5 overflow-y-auto">
           {/* Historique des questions */}
-          <ChataiBotHistory messages={messages} />
+          <ChataiQuestionHistory messages={messages} />
 
           <div
             className="w-full h-[85vh] mx-auto flex flex-col gap-5 flex-3 overflow-y-auto px-3"
@@ -53,7 +53,7 @@ const ChataiForm = ({ messages }: ChataiFormProps) => {
 
             {/* Historique des réponses */}
             <div className="flex flex-col gap-5">
-              <ChataiUserHistory messages={messages} />
+              <ChataiResponseHistory messages={messages} />
             </div>
 
             <form

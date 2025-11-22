@@ -4,7 +4,7 @@ import axios from "axios";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getConnectedUser } from "../auth/user";
-import { IChaitaiAsk } from "@/types/interfaces/IChatai";
+import { IChaitaiAsk, IChatai } from "@/types/interfaces/IChatai";
 import { getChatais } from "../get/chatai";
 
 const API_URL = process.env.NEXT_PUBLIC_CHAT_AI_API_URL!;
@@ -19,18 +19,17 @@ const createChatAi = async (prevState: IChaitaiAsk, formData: FormData) => {
 
     const question = formData.get("question") as string;
 
+    // Get chats of user
     const history = await getChatais();
-    const format =
-      history.chatais?.map((chat) => {
-        return {
-          sender: "user",
-          text: chat.question,
-        };
-      }) ?? [];
+    const chatsHistory: IChatai[] = [];
+    history.chatais?.forEach((chat) => {
+      chatsHistory.push({ sender: "user", text: chat.question });
+      chatsHistory.push({ sender: "bot", text: chat.answer! });
+    });
 
     // User's question
-    const userQuestion = { sender: "user", text: question };
-    const QA = [...prevState.messages, ...format, userQuestion];
+    // const userQuestion = { sender: "user", text: question };
+    const QA = [...prevState.messages, ...chatsHistory];
 
     // Data structure matched with API endpoint
     const data = {
