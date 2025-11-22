@@ -29,13 +29,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
         <div className="flex justify-between items-center">
           {open && (
             <Link href="/dashboard" className="ml-1.5 mr-auto">
-              <Image
-                src="/logo.png"
-                width={35}
-                height={35}
-                alt="logo"
-                className="shadow rounded-xl"
-              />
+              <Image src="/logo.png" width={35} height={35} alt="logo" />
             </Link>
           )}
 
@@ -66,7 +60,9 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
               {open && (
                 <span
                   className={`shadow p-1.5 w-full ${
-                    pathname === menu.pathname ? "text-stormy-teal" : ""
+                    pathname === menu.pathname
+                      ? "text-stormy-teal font-semibold"
+                      : ""
                   }`}
                 >
                   {menu.title}
@@ -134,7 +130,7 @@ const MENU = [
   },
   {
     id: 4,
-    title: "Chat AI",
+    title: "Chat I.A",
     pathname: "/dashboard/chatai",
     show: false,
     icon: <RiRobot2Fill size={ICON_SIZE} color="#353535" />,

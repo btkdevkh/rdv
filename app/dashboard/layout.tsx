@@ -7,7 +7,7 @@ import { ReactNode, useState } from "react";
 
 // Custom layout
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <PageWrapper>

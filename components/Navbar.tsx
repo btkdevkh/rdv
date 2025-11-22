@@ -13,13 +13,13 @@ const Navbar = ({ open }: NavbarProps) => {
     <nav className="py-1.5 px-3 bg-white">
       <div className="flex items-center justify-between">
         {!open ? (
-          <Link href="/dashboard" className="flex items-center gap-3">
+          <Link href="/dashboard" className="flex items-center gap-2">
             <Image
               src="/logo.png"
               width={35}
               height={35}
               alt="logo"
-              className="shadow rounded-xl"
+              className="-mt-2"
             />
             <span className="text-graphite font-semibold uppercase">
               Daily SaaS
