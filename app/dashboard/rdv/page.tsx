@@ -31,7 +31,7 @@ const RdvPage = async () => {
         {data.rdvs &&
           data.rdvs.length > 0 &&
           data.rdvs.map((rdv) => (
-            <div key={rdv.id} className="bg-white shadow p-3 relative">
+            <div key={rdv.id} className="bg-white shadow p-3 relative rounded">
               <div>
                 <h2>Sujet: {rdv.title}</h2>
                 <p>Avec: {rdv.withWhom}</p>
@@ -42,7 +42,10 @@ const RdvPage = async () => {
               </div>
 
               <div className="absolute top-2 right-2 flex flex-col gap-2">
-                <ActionButton id={rdv.id} handler={deleteRdv}>
+                <ActionButton
+                  id={rdv.id}
+                  handler={deleteRdv as (id?: string) => void}
+                >
                   <div className="bg-[rgb(0,0,0,0.1)] hover:bg-[rgb(0,0,0,0.3)] rounded-full p-2 transition">
                     <RiDeleteBin6Line size={20} color="crimson" />
                   </div>

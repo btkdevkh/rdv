@@ -60,7 +60,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
               {open && (
                 <span
                   className={`shadow p-1.5 w-full ${
-                    pathname === menu.pathname
+                    pathname.includes(menu.pathname)
                       ? "text-stormy-teal font-semibold"
                       : ""
                   }`}

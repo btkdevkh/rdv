@@ -1,56 +1,7 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { loginUser } from "../../actions/auth/user";
-import { signIn } from "next-auth/react";
+import LoginForm from "@/components/auth/LoginForm";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  async function handleSubmit(formData: FormData) {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    if (!email || !password) {
-      setError("Champs obligatoires");
-      setMessage("");
-      return;
-    }
-
-    const data: { email: string; password: string } = {
-      email,
-      password,
-    };
-
-    const result = await loginUser(data);
-
-    // NextAuth
-    await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
-
-    if (result.error) {
-      setError(result.error);
-      setMessage("");
-    } else {
-      if (result.message) {
-        setMessage(result.message);
-        setError("");
-      }
-      // Reset form
-      const form = document.querySelector("form") as HTMLFormElement;
-      form.reset();
-      router.push("/");
-    }
-  }
-
   return (
     <div className="w-full text-graphite">
       <div className="flex flex-col gap-5">
@@ -70,65 +21,7 @@ export default function LoginPage() {
 
         <br />
 
-        <form action={handleSubmit} className="flex flex-col gap-3">
-          <h2 className="text-xl font-bold uppercase text-center mb-3">
-            S'identifier
-          </h2>
-
-          {message && (
-            <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
-              {message}
-            </div>
-          )}
-          {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded mb-4">
-              {error}
-            </div>
-          )}
-
-          <div>
-            <input
-              type="text"
-              id="email"
-              name="email"
-              placeholder="Email *"
-              className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
-
-          <div>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Mot de passe *"
-              className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full mt-3 p-3 rounded shadow font-bold uppercase cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-          >
-            S'identifier
-          </button>
-
-          <div className="flex justify-between items-center">
-            <Link
-              href="/signup"
-              className="text-blue-700 underline text-left text-xs"
-            >
-              S'inscrire ?
-            </Link>
-
-            <Link
-              href="/forgetpass"
-              className="text-blue-700 underline text-xs"
-            >
-              Mot de passe oublié ?
-            </Link>
-          </div>
-        </form>
+        <LoginForm />
       </div>
     </div>
   );

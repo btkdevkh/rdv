@@ -39,7 +39,7 @@ const UserPage = async () => {
         {data.users &&
           data.users.length > 0 &&
           data.users?.map((user) => (
-            <div key={user.id} className="bg-white shadow p-3 relative">
+            <div key={user.id} className="bg-white shadow p-3 relative rounded">
               <div>
                 <p>Prénom: {user.firstname}</p>
                 <p>
@@ -58,7 +58,7 @@ const UserPage = async () => {
                 <ActionButton
                   id={user.id}
                   data={data.users}
-                  handler={deleteUser}
+                  handler={deleteUser as (id?: string) => void}
                 >
                   <div className="bg-[rgb(0,0,0,0.1)] hover:bg-[rgb(0,0,0,0.3)] rounded-full p-2 transition">
                     <RiDeleteBin6Line size={20} color="crimson" />
