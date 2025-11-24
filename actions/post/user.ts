@@ -19,7 +19,7 @@ export async function createUser(prevState: PrevState, formData: FormData) {
     }
 
     if (password !== confirmPassword) {
-      throw new Error("Le mot de passe sont différents");
+      throw new Error("Les mots de passe ne sont pas identiques");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -39,7 +39,7 @@ export async function createUser(prevState: PrevState, formData: FormData) {
     return {
       ...prevState,
       success: true,
-      message: "Utilisateur crée avec success",
+      message: "Utilisateur crée",
     };
   } catch (err) {
     if (err instanceof SyntaxError) {

@@ -26,7 +26,7 @@ const getUserById = async (id: string) => {
       },
     });
 
-    return { message: "Utilisateur trouvé avec success", user };
+    return { message: "Utilisateur trouvé", user };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };
@@ -38,4 +38,22 @@ const getUserById = async (id: string) => {
   }
 };
 
-export { getUsers, getUserById };
+const getUserByEmail = async (email: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    return { success: true, message: "Utilisateur trouvé", user };
+  } catch (err) {
+    if (err instanceof SyntaxError) {
+      return { error: err.message as string };
+    } else if (typeof err === "object" && err !== null && "message" in err) {
+      return { error: err.message as string };
+    } else {
+      return { error: "Internal server error" as string };
+    }
+  }
+};
+
+export { getUsers, getUserById, getUserByEmail };

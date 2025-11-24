@@ -4,12 +4,17 @@ import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BeatLoader } from "react-spinners";
-import { forgetPassword } from "@/actions/auth/user";
+import { resetPassword } from "@/actions/auth/user";
 
-export default function ForgetPassForm() {
+type ResetPassFormProps = {
+  token?: string | string[] | null;
+};
+
+export default function ResetPassForm({ token }: ResetPassFormProps) {
   const router = useRouter();
 
-  const [state, formAction, isPending] = useActionState(forgetPassword, {
+  const [state, formAction, isPending] = useActionState(resetPassword, {
+    token: token as string,
     success: false,
     message: "",
   });
@@ -36,10 +41,19 @@ export default function ForgetPassForm() {
 
       <div>
         <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Email *"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Nouveau mot de passe *"
+          className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+        />
+      </div>
+      <div>
+        <input
+          type="password"
+          id="confirm-password"
+          name="confirm-password"
+          placeholder="Confirmer le nouveau mot de passe *"
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>

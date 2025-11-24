@@ -23,6 +23,7 @@ model User {
   chatais       Chatai[]
   passwords     Password[]
   runnings      Running[]
+  resetTokens   PasswordResetToken[] 
 
   // Optional for WebAuthn support
   Authenticator Authenticator[]
@@ -83,6 +84,18 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
+model PasswordResetToken {
+  id          String   @id @default(cuid())
+  token       String   @unique
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+  used        Boolean  @default(false)
+
+  userId      String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Models
 model Rdv {
   id       String @id @default(cuid())
   title    String
@@ -90,16 +103,8 @@ model Rdv {
   date     String
   address  String
   createdAt DateTime @default(now())
-  userId   String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
 
-model Chatai {
-  id        String   @id @default(cuid())
-  question  String
-  answer    String?
-  createdAt DateTime @default(now())
-  userId    String
+  userId   String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
@@ -110,6 +115,7 @@ model Password {
   sites     String[]
   note      String
   createdAt DateTime @default(now())
+
   userId    String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -122,6 +128,17 @@ model Running {
   calories    Decimal  @db.Decimal(10, 2)
   date        String
   createdAt   DateTime @default(now())
+
   userId      String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Chatai {
+  id        String   @id @default(cuid())
+  question  String
+  answer    String?
+  createdAt DateTime @default(now())
+
+  userId    String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
