@@ -2,8 +2,9 @@
 
 import { prisma } from "@/lib/prisma";
 import { getConnectedUser } from "../auth/user";
+import { Running } from "@prisma/client";
 
-const getRdvs = async () => {
+const getRunnings = async () => {
   try {
     const { user } = await getConnectedUser();
 
@@ -11,13 +12,16 @@ const getRdvs = async () => {
       throw new Error("Identification inconnu");
     }
 
-    const rdvs = await prisma.rdv.findMany({
+    const runnings = await prisma.running.findMany({
       where: {
         userId: user.id,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
-    return { success: true, message: "Rdvs trouvés", rdvs };
+    return { success: true, message: "Runnings trouvés", runnings };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };
@@ -29,7 +33,7 @@ const getRdvs = async () => {
   }
 };
 
-const getRdvById = async (rdvId: string) => {
+const getRunningById = async (runningId: string) => {
   try {
     const { user } = await getConnectedUser();
 
@@ -37,13 +41,23 @@ const getRdvById = async (rdvId: string) => {
       throw new Error("Identification inconnu");
     }
 
-    const rdv = await prisma.rdv.findUnique({
+    const running = await prisma.running.findUnique({
       where: {
-        id: rdvId,
+        id: runningId,
       },
     });
 
-    return { success: true, message: "Rdv trouvé", rdv };
+    const convertedRunning = {
+      ...running,
+      kilometers: running?.kilometers.toNumber(),
+      calories: running?.calories.toNumber(),
+    } as Running & { kilometers: number; calories: number };
+
+    return {
+      success: true,
+      message: "Running trouvé",
+      running: convertedRunning,
+    };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };
@@ -55,4 +69,4 @@ const getRdvById = async (rdvId: string) => {
   }
 };
 
-export { getRdvs, getRdvById };
+export { getRunnings, getRunningById };

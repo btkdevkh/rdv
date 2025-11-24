@@ -43,7 +43,7 @@ export async function updateRdv(
     return {
       ...prevState,
       success: true,
-      message: "RDV modifié avec success",
+      message: "RDV modifié",
     };
   } catch (err) {
     if (err instanceof SyntaxError) {

@@ -22,6 +22,7 @@ model User {
   rdvs          Rdv[]
   chatais       Chatai[]
   passwords     Password[]
+  runnings      Running[]
 
   // Optional for WebAuthn support
   Authenticator Authenticator[]
@@ -110,5 +111,17 @@ model Password {
   note      String
   createdAt DateTime @default(now())
   userId    String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Running {
+  id          String   @id @default(cuid())
+  mode        String
+  kilometers  Decimal  @db.Decimal(10, 2)
+  durations   String
+  calories    Decimal  @db.Decimal(10, 2)
+  date        String
+  createdAt   DateTime @default(now())
+  userId      String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

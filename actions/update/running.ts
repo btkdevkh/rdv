@@ -1,11 +1,15 @@
 "use server";
 
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getConnectedUser } from "../auth/user";
-import { PrevState } from "@/types/PrevState";
+import { UpdatePrevState } from "@/types/UpdatePrevState";
 
-export async function createRdv(prevState: PrevState, formData: FormData) {
+export async function updateRunning(
+  prevState: UpdatePrevState,
+  formData: FormData
+) {
   try {
     const { user } = await getConnectedUser();
 
@@ -13,21 +17,26 @@ export async function createRdv(prevState: PrevState, formData: FormData) {
       throw new Error("Identification inconnu");
     }
 
-    const title = formData.get("title") as string;
-    const withWhom = formData.get("withWhom") as string;
+    const mode = formData.get("mode") as string;
+    const kilometers = formData.get("kilometers") as string;
+    const durations = formData.get("durations") as string;
+    const calories = formData.get("calories") as string;
     const date = formData.get("date") as string;
-    const address = formData.get("address") as string;
 
-    if (!title || !withWhom || !date || !address) {
+    if (!mode || !kilometers || !durations || !calories || !date) {
       throw new Error("Champs obligatoires");
     }
 
-    await prisma.rdv.create({
+    await prisma.running.update({
+      where: {
+        id: prevState.id,
+      },
       data: {
-        title,
-        withWhom,
+        mode,
+        kilometers: new Prisma.Decimal(Number(kilometers)),
+        durations: durations,
+        calories: new Prisma.Decimal(Number(calories)),
         date,
-        address,
         userId: user.id,
       },
     });
@@ -37,7 +46,7 @@ export async function createRdv(prevState: PrevState, formData: FormData) {
     return {
       ...prevState,
       success: true,
-      message: "RDV crée",
+      message: "Running modifié",
     };
   } catch (err) {
     if (err instanceof SyntaxError) {

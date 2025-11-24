@@ -2,35 +2,34 @@
 
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Running } from "@prisma/client";
 import { BeatLoader } from "react-spinners";
-import { createPassword } from "@/actions/post/password";
+import { updateRunning } from "@/actions/update/running";
 
-export default function CreatePasswordForm() {
+type UpdateRunningFormProps = {
+  running?: Running | null;
+};
+
+export default function UpdateRunningForm({ running }: UpdateRunningFormProps) {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState(createPassword, {
+
+  const [state, formAction, isPending] = useActionState(updateRunning, {
+    id: running?.id as string,
     success: false,
     message: "",
   });
 
   useEffect(() => {
     if (state.success) {
-      setTimeout(() => router.push("/dashboard/password"), 1000);
+      setTimeout(() => router.push("/dashboard/running"), 1000);
     }
   }, [state.success]);
 
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <h2 className="text-xl font-bold mb-3 uppercase">
-        Créer un mot de passe
+        Modifier vos course à pied
       </h2>
-
-      <div className="bg-white p-3 rounded mb-3">
-        <h2 className="text-red-700 text-xl uppercase mb-3">Attention !</h2>
-        <p className="text-graphite">
-          Le risque zéro n'existe pas. Faites des sauvegardes régulières de
-          votre base de données sur un support sécurisé.
-        </p>
-      </div>
 
       {state.success && state.message && (
         <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
@@ -44,40 +43,58 @@ export default function CreatePasswordForm() {
       )}
 
       <div>
+        <select
+          id="mode"
+          name="mode"
+          defaultValue={running?.mode}
+          className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+        >
+          <option value="treadmill">Tapis de course</option>
+          <option value="outside">Dehors</option>
+        </select>
+      </div>
+
+      <div>
+        <input
+          step="any"
+          type="number"
+          id="kilometers"
+          name="kilometers"
+          placeholder="Kilomètres"
+          defaultValue={Number(running?.kilometers)}
+          className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
+        />
+      </div>
+
+      <div>
         <input
           type="text"
-          id="username"
-          name="username"
-          placeholder="Username"
+          id="durations"
+          name="durations"
+          placeholder="Temps (00:00:00)"
+          defaultValue={running?.durations}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>
 
       <div>
         <input
-          type="password"
-          id="password"
-          name="password"
-          placeholder="Password"
+          step="any"
+          type="number"
+          id="calories"
+          name="calories"
+          placeholder="Calories"
+          defaultValue={Number(running?.calories)}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>
 
       <div>
         <input
-          type="text"
-          id="sites"
-          name="sites"
-          placeholder="Sites"
-          className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
-        />
-      </div>
-
-      <div>
-        <textarea
-          id="note"
-          name="note"
-          placeholder="Note"
+          type="date"
+          id="date"
+          name="date"
+          defaultValue={running?.date}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>

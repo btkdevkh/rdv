@@ -9,6 +9,7 @@ import { FaUsers } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
 import { signOut, useSession } from "next-auth/react";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { FaRunning } from "react-icons/fa";
 
 type LeftNavbarProps = {
   open: boolean;
@@ -59,7 +60,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
 
               {open && (
                 <span
-                  className={`shadow p-1.5 w-full ${
+                  className={`shadow p-1.5 w-full uppercase ${
                     pathname.includes(menu.pathname)
                       ? "text-stormy-teal font-semibold"
                       : ""
@@ -112,7 +113,7 @@ const MENU = [
   },
   {
     id: 2,
-    title: "Gestion des rendez-vous",
+    title: "Rendez-vous",
     pathname: "/dashboard/rdv",
     show: false,
     icon: <IoCalendarNumberSharp size={ICON_SIZE} color="#353535" />,
@@ -121,7 +122,7 @@ const MENU = [
   },
   {
     id: 3,
-    title: "Gestion des mots de passe",
+    title: "Mots de passe",
     pathname: "/dashboard/password",
     show: false,
     icon: <MdOutlinePassword size={ICON_SIZE} color="#353535" />,
@@ -130,6 +131,15 @@ const MENU = [
   },
   {
     id: 4,
+    title: "Running",
+    pathname: "/dashboard/running",
+    show: false,
+    icon: <FaRunning size={ICON_SIZE} color="#353535" />,
+    iconActive: <FaRunning size={ICON_SIZE} color="#3C6E71" />,
+    access: "User",
+  },
+  {
+    id: 5,
     title: "Chat I.A",
     pathname: "/dashboard/chatai",
     show: false,

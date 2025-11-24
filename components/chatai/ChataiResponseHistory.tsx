@@ -1,8 +1,8 @@
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import { toString } from "hast-util-to-string";
-import { FaCopy } from "react-icons/fa";
 import { Chatai } from "@prisma/client";
+import { MdOutlineContentCopy } from "react-icons/md";
 import "highlight.js/styles/atom-one-dark.css";
 
 type ChataiResponseHistoryProps = {
@@ -39,7 +39,7 @@ const ChataiResponseHistory = ({ messages }: ChataiResponseHistoryProps) => {
                             window.navigator.clipboard.writeText(codeText);
                           }}
                         >
-                          <FaCopy />
+                          <MdOutlineContentCopy />
                         </button>
                       )}
 

@@ -1,13 +1,27 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { BeatLoader } from "react-spinners";
-import { createPassword } from "@/actions/post/password";
+import { Password } from "@prisma/client";
+import { updatePassword } from "@/actions/update/password";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
-export default function CreatePasswordForm() {
+type UpdatePasswordFormProps = {
+  password?: Password | null;
+  decryptedPassword?: string;
+};
+
+export default function UpdatePasswordForm({
+  password,
+  decryptedPassword,
+}: UpdatePasswordFormProps) {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState(createPassword, {
+  const [seePassword, setSeePassword] = useState(false);
+
+  const [state, formAction, isPending] = useActionState(updatePassword, {
+    id: password?.id as string,
     success: false,
     message: "",
   });
@@ -21,16 +35,8 @@ export default function CreatePasswordForm() {
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <h2 className="text-xl font-bold mb-3 uppercase">
-        Créer un mot de passe
+        Modifier un mot de passe
       </h2>
-
-      <div className="bg-white p-3 rounded mb-3">
-        <h2 className="text-red-700 text-xl uppercase mb-3">Attention !</h2>
-        <p className="text-graphite">
-          Le risque zéro n'existe pas. Faites des sauvegardes régulières de
-          votre base de données sur un support sécurisé.
-        </p>
-      </div>
 
       {state.success && state.message && (
         <div className="bg-green-100 text-green-700 p-3 rounded mb-4">
@@ -49,18 +55,28 @@ export default function CreatePasswordForm() {
           id="username"
           name="username"
           placeholder="Username"
+          defaultValue={password?.username}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>
 
-      <div>
+      <div className="relative">
         <input
-          type="password"
+          type={seePassword ? "text" : "password"}
           id="password"
           name="password"
           placeholder="Password"
+          defaultValue={decryptedPassword}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
+
+        <button
+          type="button"
+          className="absolute top-3 right-3 cursor-pointer"
+          onClick={() => setSeePassword(!seePassword)}
+        >
+          {seePassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+        </button>
       </div>
 
       <div>
@@ -69,6 +85,7 @@ export default function CreatePasswordForm() {
           id="sites"
           name="sites"
           placeholder="Sites"
+          defaultValue={password?.sites}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>
@@ -78,6 +95,7 @@ export default function CreatePasswordForm() {
           id="note"
           name="note"
           placeholder="Note"
+          defaultValue={password?.note}
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>

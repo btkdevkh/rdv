@@ -4,16 +4,13 @@ import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { getConnectedUser } from "../auth/user";
-import { PrevState } from "@/types/PrevState";
+import { UpdatePrevState } from "@/types/UpdatePrevState";
 
-export async function createPassword(prevState: PrevState, formData: FormData) {
+export async function updatePassword(
+  prevState: UpdatePrevState,
+  formData: FormData
+) {
   try {
-    const { user } = await getConnectedUser();
-
-    if (!user) {
-      throw new Error("Identification inconnu");
-    }
-
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
     const sites = formData.get("sites") as string;
@@ -23,13 +20,18 @@ export async function createPassword(prevState: PrevState, formData: FormData) {
       throw new Error("Champs obligatoires");
     }
 
-    if (password.length < 8) {
-      throw new Error("Le mot de passe doit avoir 8 caratères minimum");
+    const { user } = await getConnectedUser();
+
+    if (!user) {
+      throw new Error("Identification inconnu");
     }
 
     const encrypted = encrypt(password);
 
-    await prisma.password.create({
+    await prisma.password.update({
+      where: {
+        id: prevState.id,
+      },
       data: {
         username,
         password: encrypted,
@@ -44,7 +46,7 @@ export async function createPassword(prevState: PrevState, formData: FormData) {
     return {
       ...prevState,
       success: true,
-      message: "Mot de passe crée avec success",
+      message: "Mot de passe modifié",
     };
   } catch (err) {
     if (err instanceof SyntaxError) {
@@ -82,20 +84,4 @@ function encrypt(text: string) {
     tag: tag.toString("base64"),
     data: encrypted.toString("base64"),
   });
-}
-
-// Fonction de déchiffrement
-function decrypt(jsonEncrypted: string) {
-  const obj = JSON.parse(jsonEncrypted);
-  const iv = Buffer.from(obj.iv, "base64");
-  const tag = Buffer.from(obj.tag, "base64");
-  const encryptedData = Buffer.from(obj.data, "base64");
-
-  const decipher = crypto.createDecipheriv("aes-256-gcm", MASTER_KEY, iv);
-  decipher.setAuthTag(tag);
-  const decrypted = Buffer.concat([
-    decipher.update(encryptedData),
-    decipher.final(),
-  ]);
-  return decrypted.toString("utf8");
 }

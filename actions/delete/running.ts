@@ -1,26 +1,25 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import { getConnectedUser } from "../auth/user";
+import { revalidatePath } from "next/cache";
 
-// ADMIN only
-export async function deleteUser(userId: string) {
+const deleteRunning = async (runningId: string) => {
   try {
     const { user } = await getConnectedUser();
 
-    if (!user || (user && user.role !== "Admin")) {
+    if (!user) {
       throw new Error("Identification inconnu");
     }
 
-    await prisma.user.delete({
+    await prisma.running.delete({
       where: {
-        id: userId,
+        id: runningId,
       },
     });
 
     revalidatePath("/");
-    return { success: true, message: "Utilisateur supprimé" };
+    return { success: true, message: "Runnings supprimé" };
   } catch (err) {
     if (err instanceof SyntaxError) {
       return { error: err.message as string };
@@ -30,4 +29,6 @@ export async function deleteUser(userId: string) {
       return { error: "Internal server error" as string };
     }
   }
-}
+};
+
+export { deleteRunning };
