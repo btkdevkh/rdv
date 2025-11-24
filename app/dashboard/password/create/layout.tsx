@@ -4,11 +4,11 @@ import { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Création RDV",
+  title: "Daily SaaS | Création mot de passe",
 };
 
 // Custom layout
-export default async function CreateRdvLayout({
+export default async function CreatePasswordLayout({
   children,
 }: {
   children: ReactNode;

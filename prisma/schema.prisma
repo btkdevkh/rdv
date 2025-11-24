@@ -21,6 +21,7 @@ model User {
   sessions      Session[]
   rdvs          Rdv[]
   chatais       Chatai[]
+  passwords     Password[]
 
   // Optional for WebAuthn support
   Authenticator Authenticator[]
@@ -87,16 +88,27 @@ model Rdv {
   withWhom String
   date     String
   address  String
+  createdAt DateTime @default(now())
   userId   String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Chatai {
   id        String   @id @default(cuid())
-  userId    String
   question  String
   answer    String?
   createdAt DateTime @default(now())
+  userId    String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
 
+model Password {
+  id        String   @id @default(cuid())
+  username  String
+  password  String
+  sites     String[]
+  note      String
+  createdAt DateTime @default(now())
+  userId    String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

@@ -122,7 +122,7 @@ const MENU = [
   {
     id: 3,
     title: "Gestion des mots de passe",
-    pathname: "/dashboard/ipass",
+    pathname: "/dashboard/password",
     show: false,
     icon: <MdOutlinePassword size={ICON_SIZE} color="#353535" />,
     iconActive: <MdOutlinePassword size={ICON_SIZE} color="#3C6E71" />,

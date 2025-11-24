@@ -32,8 +32,11 @@ Créer un fichier `.env` avec les variables ci-dessous
 DATABASE_URL="url_bdd"
 NEXTAUTH_URL="url_origin"
 AUTH_SECRET="auth_secret"
+MASTER_KEY="master_key"
 NEXT_PUBLIC_CHAT_AI_API_URL="https://votre_domaine.com/api/chat"
 ```
+
+Le `MASTER_KEY` peut être générer avec cette commande sous Linux: `openssl rand -hex 16`
 
 Dans le terminal, tapez
 

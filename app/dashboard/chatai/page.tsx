@@ -9,7 +9,7 @@ const ChatAiPage = async () => {
     <div className="p-3">
       <div className="flex justify-between items-center mb-3">
         <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-          Chat AI
+          Chat I.A
         </span>
         <BackButton />
       </div>
