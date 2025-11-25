@@ -17,7 +17,7 @@ const getRunnings = async () => {
         userId: user.id,
       },
       orderBy: {
-        createdAt: "desc",
+        date: "desc", // Treadmill's date
       },
     });
 

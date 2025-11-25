@@ -8,6 +8,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { MdAdminPanelSettings } from "react-icons/md";
 import { PiPencilDuotone } from "react-icons/pi";
 import Link from "next/link";
+import TabLink from "@/components/TabLink";
 
 const UserPage = async () => {
   const { user } = await getConnectedUser();
@@ -23,15 +24,14 @@ const UserPage = async () => {
       <div className="flex justify-between items-center mb-3">
         {data.users && data.users.length === 0 ? (
           <span className="bg-green-100 text-green-700 py-2 px-4 rounded">
-            Il n'y pas d'utilisateur
+            Aucune donnée disponible
           </span>
         ) : (
-          <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-            Utilisateurs
-          </span>
+          <div className="flex items-center gap-1">
+            <TabLink url="/dashboard/user" title="Utilisateurs" />
+          </div>
         )}
 
-        {/* Create button */}
         <CreateButton page="user" />
       </div>
 

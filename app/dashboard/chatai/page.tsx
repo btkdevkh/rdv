@@ -1,6 +1,7 @@
 import BackButton from "@/components/BackButton";
 import ChataiForm from "@/components/chatai/ChataiForm";
 import { getChatais } from "@/actions/get/chatai";
+import TabLink from "@/components/TabLink";
 
 const ChatAiPage = async () => {
   const data = await getChatais();
@@ -8,9 +9,10 @@ const ChatAiPage = async () => {
   return (
     <div className="p-3">
       <div className="flex justify-between items-center mb-3">
-        <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-          Chat I.A
-        </span>
+        <div className="flex items-center gap-1">
+          <TabLink url="/dashboard/chatai" title="Chat I.A" />
+        </div>
+
         <BackButton />
       </div>
 

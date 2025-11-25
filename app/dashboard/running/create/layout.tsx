@@ -1,5 +1,6 @@
 import BackButton from "@/components/BackButton";
 import PageWrapper from "@/components/PageWrapper";
+import TabLink from "@/components/TabLink";
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
@@ -16,11 +17,10 @@ export default async function CreateRunningLayout({
   return (
     <PageWrapper>
       <div className="flex justify-between items-center p-3">
-        <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-          Créer
-        </span>
+        <div className="flex items-center gap-1">
+          <TabLink url="/dashboard/running/create" title="Créer" />
+        </div>
 
-        {/* Back button */}
         <BackButton />
       </div>
 

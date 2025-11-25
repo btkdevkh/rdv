@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import PageWrapper from "@/components/PageWrapper";
 import { Metadata } from "next";
 import BackButton from "@/components/BackButton";
+import TabLink from "@/components/TabLink";
 
 export const metadata: Metadata = {
   title: "Daily SaaS | Création Utilisateur",
@@ -16,11 +17,10 @@ export default async function CreateUserLayout({
   return (
     <PageWrapper>
       <div className="flex justify-between items-center p-3">
-        <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-          Créer
-        </span>
+        <div className="flex items-center gap-1">
+          <TabLink url="/dashboard/user/create" title="Créer" />
+        </div>
 
-        {/* Back button */}
         <BackButton />
       </div>
 

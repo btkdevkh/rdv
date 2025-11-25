@@ -11,7 +11,7 @@ const BackButton = ({ url }: BackButtonProps) => {
 
   return (
     <button
-      className="bg-yale-blue py-2 px-6 rounded font-semibold cursor-pointer uppercase"
+      className="bg-yale-blue py-2 px-4 rounded font-semibold cursor-pointer uppercase"
       onClick={() => router.back()}
     >
       Retour

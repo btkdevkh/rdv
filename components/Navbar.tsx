@@ -31,7 +31,7 @@ const Navbar = ({ open }: NavbarProps) => {
           </span>
         )}
 
-        <div className="text-white font-semibold bg-stormy-teal w-[35px] h-[35px] rounded-full flex items-center justify-center shadow">
+        <div className="text-white font-semibold bg-[#3cbf99] w-[35px] h-[35px] rounded-full flex items-center justify-center shadow">
           <span>
             {session?.user.name?.split(" ")[0][0]}
             {session?.user.name?.split(" ")[1][0]}

@@ -79,7 +79,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
         <button
           type="button"
           title="Déconnexion"
-          className="w-fit flex items-center gap-2 py-2 px-4 shadow text-graphite font-semibold mt-auto mb-3 self-center cursor-pointer transition uppercase"
+          className="w-fit flex items-center gap-2 py-2 px-4 shadow text-graphite font-semibold mt-auto mb-3 self-center cursor-pointer hover:bg-[rgb(0,0,0,0.2)] transition uppercase"
           onClick={() => signOut()}
         >
           <AiOutlineLogout size={28} /> <span>Déconnexion</span>
@@ -114,24 +114,6 @@ const MENU = [
   },
   {
     id: uuidv4(),
-    title: "Course à pied",
-    pathname: "/dashboard/running",
-    show: false,
-    icon: <FaRunning size={ICON_SIZE} color="#353535" />,
-    iconActive: <FaRunning size={ICON_SIZE} color="#3C6E71" />,
-    access: "User",
-  },
-  {
-    id: uuidv4(),
-    title: "Chat I.A",
-    pathname: "/dashboard/chatai",
-    show: false,
-    icon: <RiRobot2Fill size={ICON_SIZE} color="#353535" />,
-    iconActive: <RiRobot2Fill size={ICON_SIZE} color="#3C6E71" />,
-    access: "User",
-  },
-  {
-    id: uuidv4(),
     title: "Rendez-vous",
     pathname: "/dashboard/rdv",
     show: false,
@@ -146,6 +128,24 @@ const MENU = [
     show: false,
     icon: <MdOutlinePassword size={ICON_SIZE} color="#353535" />,
     iconActive: <MdOutlinePassword size={ICON_SIZE} color="#3C6E71" />,
+    access: "User",
+  },
+  {
+    id: uuidv4(),
+    title: "Course à pied",
+    pathname: "/dashboard/running",
+    show: false,
+    icon: <FaRunning size={ICON_SIZE} color="#353535" />,
+    iconActive: <FaRunning size={ICON_SIZE} color="#3C6E71" />,
+    access: "User",
+  },
+  {
+    id: uuidv4(),
+    title: "Chatbot I.A",
+    pathname: "/dashboard/chatai",
+    show: false,
+    icon: <RiRobot2Fill size={ICON_SIZE} color="#353535" />,
+    iconActive: <RiRobot2Fill size={ICON_SIZE} color="#3C6E71" />,
     access: "User",
   },
 ];

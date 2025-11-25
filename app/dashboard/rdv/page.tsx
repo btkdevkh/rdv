@@ -6,6 +6,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Link from "next/link";
 import { PiPencilDuotone } from "react-icons/pi";
 import { format } from "date-fns";
+import TabLink from "@/components/TabLink";
 
 const RdvPage = async () => {
   const data = await getRdvs();
@@ -15,15 +16,14 @@ const RdvPage = async () => {
       <div className="flex justify-between items-center mb-3">
         {data.rdvs && data.rdvs.length === 0 ? (
           <span className="bg-green-100 text-green-700 py-2 px-4 rounded">
-            Il n'y pas de rendez-vous
+            Aucune donnée disponible
           </span>
         ) : (
-          <span className="text-graphite font-semibold uppercase border-b-2 border-stormy-teal">
-            Rendez-vous
-          </span>
+          <div className="flex items-center gap-1">
+            <TabLink url="/dashboard/rdv" title="Rendez-vous" />
+          </div>
         )}
 
-        {/* Create button */}
         <CreateButton page="rdv" />
       </div>
 

@@ -31,7 +31,7 @@ const ChataiForm = ({ messages }: ChataiFormProps) => {
   }, [state]);
 
   return (
-    <div className="p-3">
+    <div>
       <div
         className={`${
           messages.length === 0 ? "max-w-[600px]" : ""
