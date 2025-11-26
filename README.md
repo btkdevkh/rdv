@@ -16,7 +16,8 @@ Un SaaS de gestionnnaire d'utilités développée avec Next.js et TypeScript.
 ![Daily SaaS Users](https://github.com/btkdevkh/daily-saas/blob/main/public/users_v9.png?raw=true)
 ![Daily SaaS Rdv](https://github.com/btkdevkh/daily-saas/blob/main/public/rdv_v5.png?raw=true)
 ![Daily SaaS Password](https://github.com/btkdevkh/daily-saas/blob/main/public/password_v3.png?raw=true)
-![Daily SaaS Running](https://github.com/btkdevkh/daily-saas/blob/main/public/running_v3.png?raw=true)
+![Daily SaaS Running](https://github.com/btkdevkh/daily-saas/blob/main/public/running_v4.png?raw=true)
+![Daily SaaS Running Recap](https://github.com/btkdevkh/daily-saas/blob/main/public/running_recap_v1.png?raw=true)
 ![Daily SaaS Chat AI](https://github.com/btkdevkh/daily-saas/blob/main/public/chatai_v8.png?raw=true)
 
 ## Technologies utilisées

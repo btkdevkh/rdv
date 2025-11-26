@@ -17,7 +17,7 @@ import {
   Cell,
 } from "recharts";
 
-type PreparedData = {
+export type PreparedData = {
   dateLabel: string;
   kilometers: number;
   calories: number;
@@ -70,7 +70,9 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
       <ComposedChart data={prepared}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="dateLabel" tickFormatter={formatXAxis} />
-        <YAxis
+
+        {/* km / kcal & min / km */}
+        {/* <YAxis
           yAxisId="left"
           orientation="left"
           label={{ value: "km / kcal", angle: -90, position: "insideLeft" }}
@@ -82,7 +84,7 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
           yAxisId="right"
           orientation="right"
           label={{
-            value: "",
+            value: "min / km",
             angle: 90,
             position: "insideRight",
           }}
@@ -90,6 +92,18 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
           padding={{
             top: 10,
           }}
+        /> */}
+
+        {/* Km & Cal */}
+        <YAxis
+          yAxisId="km"
+          orientation="left"
+          label={{ value: "km", angle: -90, position: "insideLeft" }}
+        />
+        <YAxis
+          yAxisId="cal"
+          orientation="right"
+          label={{ value: "kcal", angle: 90, position: "insideRight" }}
         />
 
         {/* Tooltip */}
@@ -98,14 +112,31 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
         {/* Legends */}
         <Legend wrapperStyle={{ color: "#ff9800" }} />
 
+        {/* Kilometers */}
         <Bar
-          yAxisId="left"
+          yAxisId="km"
           dataKey="kilometers"
           name="Distance (km)"
           fill="#1976d2"
           barSize={50}
         />
-        <Bar yAxisId="left" dataKey="calories" name="Calories" barSize={50}>
+
+        <defs>
+          <linearGradient id="caloriesGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#f44336" /> {/* Rouge */}
+            <stop offset="50%" stopColor="#ff9800" /> {/* Orange */}
+            <stop offset="100%" stopColor="#4caf50" /> {/* Vert */}
+          </linearGradient>
+        </defs>
+
+        {/* Calories */}
+        <Bar
+          yAxisId="cal"
+          dataKey="calories"
+          name="Calories"
+          barSize={50}
+          fill="url(#caloriesGradient)"
+        >
           {runnings.map((entry, index) => (
             <Cell
               key={`cell-${index}`}
@@ -134,7 +165,8 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
   );
 }
 
-function parseDurationToSeconds(strOrNum?: string | number): number {
+// Helpers
+const parseDurationToSeconds = (strOrNum?: string | number): number => {
   if (strOrNum == null) return 0;
   if (typeof strOrNum === "number") return Math.max(0, Math.floor(strOrNum));
 
@@ -144,15 +176,15 @@ function parseDurationToSeconds(strOrNum?: string | number): number {
   if (parts.length === 3)
     return parts[0] * 3600 + (parts[1] || 0) * 60 + (parts[2] || 0);
   return 0;
-}
+};
 
-function formatMinPerKm(value?: number | null): string {
+const formatMinPerKm = (value?: number | null): string => {
   if (value == null || Number.isNaN(value)) return "-";
 
   const totalSec = Math.round((value || 0) * 60);
   const m = Math.floor(totalSec / 60);
   const s = totalSec % 60;
   return `${m}:${String(s).padStart(2, "0")} min/km`;
-}
+};
 
 const formatXAxis = (tickItem: string) => format(new Date(tickItem), "dd/MM");

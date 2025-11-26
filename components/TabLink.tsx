@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 type TabLinkProps = {
   url: string;
@@ -10,14 +10,16 @@ type TabLinkProps = {
 
 const TabLink = ({ url, title }: TabLinkProps) => {
   const pathname = usePathname();
-
-  console.log(pathname);
+  const searchParams = useSearchParams();
+  const order = searchParams.get("order");
 
   return (
     <Link
       href={url}
       className={`font-semibold uppercase border-b-3 border-white ${
-        pathname === url ? "bg-graphite" : "bg-[#979696]"
+        pathname === url || `${pathname}?order=${order}` === url
+          ? "bg-graphite"
+          : "bg-[#979696]"
       } text-white shadow  py-1 px-2`}
     >
       {title}

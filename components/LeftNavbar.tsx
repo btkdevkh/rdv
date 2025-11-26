@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { IoCalendarNumberSharp } from "react-icons/io5";
 import { MdOutlinePassword } from "react-icons/md";
@@ -20,6 +20,8 @@ type LeftNavbarProps = {
 const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const order = searchParams.get("order") ?? 1;
 
   return (
     <div
@@ -49,29 +51,39 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
         <nav className={`flex flex-col ${!open ? "items-center" : ""} gap-3`}>
           {MENU.filter(
             (menu) => menu.access === "User" || session?.user.role === "Admin"
-          ).map((menu) => (
-            <Link
-              key={menu.id}
-              href={menu.pathname}
-              className={`flex items-center gap-2 ${open ? "p-1" : ""}`}
-            >
-              <span className="shadow p-1.5">
-                {pathname.includes(menu.pathname) ? menu.iconActive : menu.icon}
-              </span>
-
-              {open && (
-                <span
-                  className={`w-full shadow p-1.5 uppercase ${
-                    pathname.includes(menu.pathname)
-                      ? "text-stormy-teal font-semibold"
-                      : ""
-                  }`}
-                >
-                  {menu.title}
+          ).map((menu) => {
+            return (
+              <Link
+                key={menu.id}
+                href={
+                  menu.pathname === "/dashboard/running"
+                    ? `${menu.pathname}?order=${order}`
+                    : menu.pathname
+                }
+                className={`flex items-center gap-2 ${open ? "p-1" : ""}`}
+              >
+                <span className="shadow p-1.5">
+                  {pathname.includes(menu.pathname) ||
+                  `${pathname}?order=${order}`.includes(menu.pathname)
+                    ? menu.iconActive
+                    : menu.icon}
                 </span>
-              )}
-            </Link>
-          ))}
+
+                {open && (
+                  <span
+                    className={`w-full shadow p-1.5 uppercase ${
+                      pathname.includes(menu.pathname) ||
+                      `${pathname}?order=${order}`.includes(menu.pathname)
+                        ? "text-stormy-teal font-semibold"
+                        : ""
+                    }`}
+                  >
+                    {menu.title}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
         </nav>
       </div>
 
