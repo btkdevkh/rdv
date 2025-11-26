@@ -2,6 +2,7 @@ import { getRunnings } from "@/actions/get/running";
 import CreateButton from "@/components/CreateButton";
 import RunningChart from "@/components/running/RunningChart";
 import RunningList from "@/components/running/RunningList";
+import RunningRecapChart from "@/components/running/RunningRecapChart";
 import TabLink from "@/components/TabLink";
 import { IRunning } from "@/types/interfaces/IRunning";
 
@@ -45,8 +46,14 @@ const RunningPage = async ({
           </span>
         ) : (
           <div className="flex items-center gap-1">
-            <TabLink url={`/dashboard/running?order=${1}`} title="Calories" />
-            <TabLink url={`/dashboard/running?order=${2}`} title="Distance" />
+            <TabLink
+              url={`/dashboard/running?order=${1}`}
+              title="Distance / Calories"
+            />
+            <TabLink
+              url={`/dashboard/running?order=${2}`}
+              title="Récapitulatif"
+            />
           </div>
         )}
 
@@ -62,8 +69,8 @@ const RunningPage = async ({
                   key={i}
                   className="bg-white pb-3 pt-4 px-3 flex flex-col items-center justify-center gap-1 rounded"
                 >
-                  <span className="text-[#727272]">
-                    Activités : {getRunningYear(chunk)}{" "}
+                  <span className="text-graphite">
+                    <b>Activités :</b> {getRunningYear(chunk)}
                   </span>
 
                   <RunningChart
@@ -75,11 +82,28 @@ const RunningPage = async ({
               ))}
             </>
           )}
+
+          {order && Number(order) === 2 && formatRunnings && (
+            <div className="bg-white pb-3 pt-4 px-3 flex flex-col items-center justify-center gap-1 rounded">
+              <span className="text-graphite">
+                <b>Récapitulatif : </b>
+                {new Date(formatRunnings[0].date).getFullYear()} -{" "}
+                {new Date(
+                  formatRunnings[formatRunnings.length - 1].date
+                ).getFullYear()}
+              </span>
+              <br />
+
+              <RunningRecapChart runnings={formatRunnings ?? []} />
+            </div>
+          )}
         </div>
 
-        <div className="flex-1 h-[87.5vh] overflow-y-auto overflow-x-hidden rounded pr-3">
-          <RunningList runnings={data.runnings ?? []} />
-        </div>
+        {order && Number(order) === 1 && (
+          <div className="flex-1 h-[87.5vh] overflow-y-auto overflow-x-hidden rounded pr-3">
+            <RunningList runnings={data.runnings ?? []} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -88,7 +112,7 @@ const RunningPage = async ({
 export default RunningPage;
 
 // Helpers
-function chunkArray(array: any[], size: number) {
+const chunkArray = (array: any[], size: number) => {
   const result: any[] = [];
   for (let i = 0; i < array.length; i += size) {
     result.push(
@@ -96,9 +120,9 @@ function chunkArray(array: any[], size: number) {
     );
   }
   return result;
-}
+};
 
-function getRunningYear(array: any[]) {
+const getRunningYear = (array: any[]) => {
   const years = array.map((arr) => new Date(arr.date).getFullYear());
 
   if (years.every((y) => y === years[0])) {
@@ -109,4 +133,4 @@ function getRunningYear(array: any[]) {
       uniqueYears.toString().split(",")[1]
     }`;
   }
-}
+};
