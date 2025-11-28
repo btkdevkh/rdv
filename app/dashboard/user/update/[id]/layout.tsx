@@ -5,7 +5,7 @@ import BackButton from "@/components/BackButton";
 import TabLink from "@/components/TabLink";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Modification Utilisateur",
+  title: "Daily SaaS | Modification",
 };
 
 // Custom layout

@@ -1,22 +1,20 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
-import { HashLoader } from "react-spinners";
+import { BeatLoader } from "react-spinners";
 
 type SubmitButtonProps = {
-  title: string;
+  isPending: boolean;
+  title?: string;
 };
 
-const SubmitButton = ({ title }: SubmitButtonProps) => {
-  const { pending } = useFormStatus();
-
+const SubmitButton = ({ isPending, title = "Valider" }: SubmitButtonProps) => {
   return (
     <button
       type="submit"
-      disabled={pending}
-      className="bg-yale-blue text-white text-sm p-2 rounded-xl font-semibold hover:bg-stormy-teal transition uppercase absolute right-1"
+      disabled={isPending}
+      className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
     >
-      {pending ? <HashLoader size={20} color="#37d7b7" /> : title}
+      {isPending ? <BeatLoader color="#45d7b6" size={20} /> : title}
     </button>
   );
 };

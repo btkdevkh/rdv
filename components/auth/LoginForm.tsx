@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loginUser } from "../../actions/auth/user";
 import { signIn } from "next-auth/react";
-import { BeatLoader } from "react-spinners";
+import SubmitButton from "../SubmitButton";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -33,7 +33,7 @@ export default function LoginForm() {
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <h2 className="text-xl font-bold uppercase text-center mb-3">
-        S'identifier
+        Identification
       </h2>
 
       {state.success && state.message && (
@@ -68,12 +68,7 @@ export default function LoginForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? <BeatLoader color="#45d7b6" size={20} /> : "S'identifier"}
-      </button>
+      <SubmitButton isPending={isPending} title="S'identifier" />
 
       <div className="flex justify-between items-center">
         <Link

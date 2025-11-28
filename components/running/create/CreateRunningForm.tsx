@@ -2,8 +2,8 @@
 
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BeatLoader } from "react-spinners";
 import { createRunning } from "@/actions/post/running";
+import SubmitButton from "@/components/SubmitButton";
 
 export default function CreateRunningForm() {
   const router = useRouter();
@@ -87,12 +87,7 @@ export default function CreateRunningForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? <BeatLoader color="#45d7b6" size={20} /> : "Valider"}
-      </button>
+      <SubmitButton isPending={isPending} />
     </form>
   );
 }

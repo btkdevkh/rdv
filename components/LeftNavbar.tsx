@@ -62,7 +62,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
                 }
                 className={`flex items-center gap-2 ${open ? "p-1" : ""}`}
               >
-                <span className="shadow p-1.5">
+                <span className="shadow p-1.5 hover:bg-[rgb(0,0,0,0.1)] transition">
                   {pathname.includes(menu.pathname) ||
                   `${pathname}?order=${order}`.includes(menu.pathname)
                     ? menu.iconActive
@@ -71,7 +71,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
 
                 {open && (
                   <span
-                    className={`w-full shadow p-1.5 uppercase ${
+                    className={`w-full shadow py-1.5 px-3 uppercase hover:bg-[rgb(0,0,0,0.1)] transition ${
                       pathname.includes(menu.pathname) ||
                       `${pathname}?order=${order}`.includes(menu.pathname)
                         ? "text-stormy-teal font-semibold"
@@ -91,7 +91,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
         <button
           type="button"
           title="Déconnexion"
-          className="w-fit flex items-center gap-2 py-2 px-4 shadow text-graphite font-semibold mt-auto mb-3 self-center cursor-pointer hover:bg-[rgb(0,0,0,0.2)] transition uppercase"
+          className="w-fit flex items-center gap-2 py-2 px-4 shadow text-graphite font-semibold mt-auto mb-3 self-center cursor-pointer hover:bg-[rgb(0,0,0,0.1)] transition uppercase"
           onClick={() => signOut()}
         >
           <AiOutlineLogout size={28} /> <span>Déconnexion</span>
@@ -100,7 +100,7 @@ const LeftNavbar = ({ open, setOpen }: LeftNavbarProps) => {
         <button
           type="button"
           title="Déconnexion"
-          className="w-fit py-1.5 px-1.5 rounded-full text-graphite mt-auto mb- self-center cursor-pointer hover:bg-[rgb(0,0,0,0.2)] transition"
+          className="w-fit py-1.5 px-1.5 rounded-full text-graphite mt-auto mb- self-center cursor-pointer hover:bg-[rgb(0,0,0,0.1)] transition"
           onClick={() => signOut()}
         >
           <AiOutlineLogout size={28} />

@@ -53,7 +53,7 @@ export default function RunningChart({ runnings }: { runnings: IRunning[] }) {
     const cal = payload.find((pl: any) => pl.dataKey === "calories");
     const dur = prepared.find((x) => x.dateLabel === label)?.durationMin;
     return (
-      <div className="bg-white text-graphite p-3 rounded flex flex-col gap-1 border-3 border-[#36d7b7]">
+      <div className="bg-white text-graphite p-3 rounded flex flex-col gap-1 border-3 border-stormy-teal">
         <div>
           <strong>{format(new Date(label), "dd/MM/yyyy")}</strong>
         </div>

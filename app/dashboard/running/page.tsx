@@ -46,10 +46,7 @@ const RunningPage = async ({
           </span>
         ) : (
           <div className="flex items-center gap-1">
-            <TabLink
-              url={`/dashboard/running?order=${1}`}
-              title="Distance / Calories"
-            />
+            <TabLink url={`/dashboard/running?order=${1}`} title="Activités" />
             <TabLink
               url={`/dashboard/running?order=${2}`}
               title="Récapitulatif"
