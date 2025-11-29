@@ -1,0 +1,36 @@
+# Dockerfile or dependencies has been modified :
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build -d
+
+# Development :
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml stop
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+
+# sudo docker image prune
+# sudo docker volume ls
+# sudo docker volume rm VOLUME_NAME
+# sudo docker system prune -a --volumes
+
+# !UTILS (todo only when restoring sql dump) :
+# docker exec -it CONTAINER_NAME psql -U POSTGRES_USER -d POSTGRES_DB (connect to container)
+# DROP SCHEMA public CASCADE;
+# CREATE SCHEMA public;
+# docker exec -i CONTAINER_NAME psql -U POSTGRES_USER -d POSTGRES_DB < dump.sql (restore dump)
+#---------------------------------------------------------------------------------------------
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: sh -c "npx prisma migrate dev --name init && npm run dev"
+    volumes:
+      - ./:/app
+    env_file:
+      - .env.local
+  db:
+    env_file:
+      - .env.local
+    ports:
+      - "5433:5432"

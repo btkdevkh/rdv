@@ -108,17 +108,17 @@ const forgetPassword = async (prevState: PrevState, formData: FormData) => {
 
     // Création du transport SMTP
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
+      host: process.env.NEXT_PUBLIC_SMTP_HOST,
+      port: Number(process.env.NEXT_PUBLIC_SMTP_PORT),
       secure: false, // use TLS (STARTTLS) on port 587
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.NEXT_PUBLIC_SMTP_USER,
+        pass: process.env.NEXT_PUBLIC_SMTP_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: `"Support" <${process.env.SMTP_USER}>`,
+      from: `"Support" <${process.env.NEXT_PUBLIC_SMTP_USER}>`,
       to: email,
       subject: "Réinitialisation de votre mot de passe",
       html: `
@@ -204,19 +204,19 @@ const resetPassword = async (
 
     // Création du transport SMTP
     const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
+      host: process.env.NEXT_PUBLIC_SMTP_HOST,
+      port: Number(process.env.NEXT_PUBLIC_SMTP_PORT),
       secure: false, // use TLS (STARTTLS) on port 587
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.NEXT_PUBLIC_SMTP_USER,
+        pass: process.env.NEXT_PUBLIC_SMTP_PASS,
       },
     });
 
     const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL}/login`;
 
     await transporter.sendMail({
-      from: `"Support" <${process.env.SMTP_USER}>`,
+      from: `"Support" <${process.env.NEXT_PUBLIC_SMTP_USER}>`,
       to: user.email,
       subject: "Réinitialisation de votre mot de passe",
       html: `

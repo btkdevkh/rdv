@@ -5,3 +5,7 @@ Dockerfile
 docker-compose.yml
 .github
 _features.md
+
+# Environment
+.env
+.env*

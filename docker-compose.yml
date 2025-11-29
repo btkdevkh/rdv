@@ -1,33 +1,27 @@
+# This "docker-compose.yml" is common base file to :
+# "docker-compose.dev.yml" & "docker-compose.prod.yml"
+# Listing here things to share commonly between those two files
+#--------------------------------------------------------------
+
 services:
   app:
     build: .
-    container_name: daily_saas
     restart: always
-    # Uncomment if using volumes
-    # volumes:
-    #   - ./:/app
+    container_name: daily_saas
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
     ports:
-      - "3002:3000"
-      - "3001:3000"
-    env_file:
-      - .env
+      - "3000:3000"
     depends_on:
       - db
   db:
     image: postgres
     restart: always
     container_name: daily_saas_db
-    environment:
-      - POSTGRES_USER=POSTGRES_USER
-      - POSTGRES_PASSWORD=POSTGRES_PASSWORD
-      - POSTGRES_DB=POSTGRES_DB
-
-    # Uncomment if using volumes
-    # DATABASE_URL="DATABASE_URL"
-    ports:
-      - "5433:5432"
     volumes:
-      - db_data:/var/lib/postgresql
+      - dbdata:/var/lib/postgresql
 
 volumes:
-  db_data:
+  dbdata:

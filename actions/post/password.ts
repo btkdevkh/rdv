@@ -65,7 +65,7 @@ export async function createPassword(prevState: PrevState, formData: FormData) {
 // Clé maître depuis .env
 const MASTER_KEY = crypto
   .createHash("sha256")
-  .update(process.env.MASTER_KEY!)
+  .update(process.env.NEXT_PUBLIC_MASTER_KEY!)
   .digest();
 
 // Fonction de chiffrement AES-GCM

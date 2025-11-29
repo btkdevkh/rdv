@@ -8,10 +8,10 @@ Un SaaS de gestionnnaire d'utilités développée avec Next.js et TypeScript.
 - Gestionnaire des course à pied
 - Chat I.A d'OpenAI
 
-![Daily SaaS Signup](https://github.com/btkdevkh/daily-saas/blob/main/public/signup_v2.png?raw=true)
-![Daily SaaS Login](https://github.com/btkdevkh/daily-saas/blob/main/public/login_v4.png?raw=true)
-![Daily SaaS Forget](https://github.com/btkdevkh/daily-saas/blob/main/public/forgetpass_v1.png?raw=true)
-![Daily SaaS Reset](https://github.com/btkdevkh/daily-saas/blob/main/public/resetpass_v1.png?raw=true)
+![Daily SaaS Signup](https://github.com/btkdevkh/daily-saas/blob/main/public/signup_v3.png?raw=true)
+![Daily SaaS Login](https://github.com/btkdevkh/daily-saas/blob/main/public/login_v5.png?raw=true)
+![Daily SaaS Forget](https://github.com/btkdevkh/daily-saas/blob/main/public/forgetpass_v2.png?raw=true)
+![Daily SaaS Reset](https://github.com/btkdevkh/daily-saas/blob/main/public/resetpass_v2.png?raw=true)
 
 ![Daily SaaS Users](https://github.com/btkdevkh/daily-saas/blob/main/public/users_v9.png?raw=true)
 ![Daily SaaS Rdv](https://github.com/btkdevkh/daily-saas/blob/main/public/rdv_v5.png?raw=true)
@@ -34,26 +34,28 @@ Un SaaS de gestionnnaire d'utilités développée avec Next.js et TypeScript.
 - `/components` - Composants réutilisables
 - `/data` - Données mockées
 - `/types` - Types et interfaces TypeScript
-- `/etc.`
+- `/etc...`
 
 ## Installation
 
-Créer un fichier `.env` avec les variables ci-dessous
+Créer un fichier `.env.local` et `.env.prod` avec les variables ci-dessous
 
 ```bash
 DATABASE_URL="url_bdd"
 NEXTAUTH_URL="url_origin"
 AUTH_SECRET="auth_secret"
-MASTER_KEY="master_key"
-SMTP_USER="smtp_user"
-SMTP_PASS="smtp_pass"
-SMTP_HOST="smtp_host"
-SMTP_PORT="smtp_port"
+NEXT_PUBLIC_MASTER_KEY="master_key"
+NEXT_PUBLIC_SMTP_USER="smtp_user"
+NEXT_PUBLIC_SMTP_PASS="smtp_pass"
+NEXT_PUBLIC_SMTP_HOST="smtp_host"
+NEXT_PUBLIC_SMTP_PORT="smtp_port"
 NEXT_PUBLIC_APP_URL="url_origin"
 NEXT_PUBLIC_CHAT_AI_API_URL="https://votre_domaine.com/api/chat"
 ```
 
-Le `MASTER_KEY` peut être générer avec cette commande sous Linux: `openssl rand -hex 16`
+Le `NEXT_PUBLIC_MASTER_KEY` peut être générer avec cette commande sous Linux: `openssl rand -hex 16`
+
+### Local mode
 
 Dans le terminal, tapez
 
@@ -69,10 +71,28 @@ npx prisma generate
 npx prisma db seed
 ```
 
-## Démarrage en développement
+### Démarrage en développement
 
 ```bash
 npm run dev
+```
+
+L'application sera accessible sur http://localhost:3000
+
+### Docker mode
+
+Aussurez-vous d'avoir Docker installé.
+
+Lancer cette commande en développement :
+
+```bash
+sudo docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+
+Lancer cette commande pour le build en production :
+
+```bash
+sudo docker compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 ```
 
 L'application sera accessible sur http://localhost:3000
