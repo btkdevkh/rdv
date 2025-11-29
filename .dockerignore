@@ -1,0 +1,7 @@
+.nexnode_modules
+.next
+npm-debug.log
+Dockerfile
+docker-compose.yml
+.github
+_features.md

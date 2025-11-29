@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BeatLoader } from "react-spinners";
 import { createUser } from "@/actions/post/user";
+import SubmitButton from "@/components/SubmitButton";
 
 const CreateUserFormExternal = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const CreateUserFormExternal = () => {
   return (
     <form action={formAction} className="flex flex-col gap-3">
       <h2 className="text-xl font-bold uppercase text-center mb-3">
-        S'inscrire
+        Inscription
       </h2>
 
       {state.success && state.message && (
@@ -88,12 +88,7 @@ const CreateUserFormExternal = () => {
         />
       </div>
 
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? <BeatLoader color="#45d7b6" size={20} /> : "S'inscrire"}
-      </button>
+      <SubmitButton isPending={isPending} title="S'inscrire" />
 
       <div className="flex justify-between items-center">
         <Link

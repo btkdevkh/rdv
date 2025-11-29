@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Modification mot de passe",
+  title: "Daily SaaS | Modification",
 };
 
 // Custom layout

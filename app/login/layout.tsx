@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Daily SaaS | Authentification",
+  title: "Daily SaaS | Identification",
 };
 
 // Custom layout

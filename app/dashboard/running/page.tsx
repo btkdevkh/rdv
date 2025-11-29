@@ -46,10 +46,7 @@ const RunningPage = async ({
           </span>
         ) : (
           <div className="flex items-center gap-1">
-            <TabLink
-              url={`/dashboard/running?order=${1}`}
-              title="Distance / Calories"
-            />
+            <TabLink url={`/dashboard/running?order=${1}`} title="Activités" />
             <TabLink
               url={`/dashboard/running?order=${2}`}
               title="Récapitulatif"
@@ -61,7 +58,11 @@ const RunningPage = async ({
       </div>
 
       <div className="flex items-center gap-3">
-        <div className="flex-3 flex flex-col gap-3 h-[87.5vh] overflow-y-auto overflow-x-hidden rounded pr-3">
+        <div
+          className={`flex-3 flex flex-col gap-3 h-[87.5vh] overflow-y-auto overflow-x-hidden rounded ${
+            order && Number(order) === 1 ? "pr-3" : ""
+          }`}
+        >
           {order && Number(order) === 1 && (
             <>
               {chunkArray(formatRunnings ?? [], 12).map((chunk, i) => (

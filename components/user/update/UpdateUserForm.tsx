@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { updateUser } from "@/actions/update/user";
 import { User } from "@prisma/client";
-import { BeatLoader } from "react-spinners";
+import SubmitButton from "@/components/SubmitButton";
 
 type UpdateUserFormProps = {
   user?: User | null;
@@ -92,12 +92,7 @@ const UpdateUserForm = ({ user }: UpdateUserFormProps) => {
         </div>
       )}
 
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? <BeatLoader color="#45d7b6" size={20} /> : "Valider"}
-      </button>
+      <SubmitButton isPending={isPending} />
     </form>
   );
 };

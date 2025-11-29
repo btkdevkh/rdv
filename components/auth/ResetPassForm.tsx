@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BeatLoader } from "react-spinners";
 import { resetPassword } from "@/actions/auth/user";
+import SubmitButton from "../SubmitButton";
 
 type ResetPassFormProps = {
   token?: string | string[] | null;
@@ -57,16 +57,8 @@ export default function ResetPassForm({ token }: ResetPassFormProps) {
           className="w-full p-3 shadow bg-white rounded outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal"
         />
       </div>
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? (
-          <BeatLoader color="#45d7b6" size={20} />
-        ) : (
-          "Réinitialisation"
-        )}
-      </button>
+
+      <SubmitButton isPending={isPending} title="Réinitialisation" />
 
       <div className="flex justify-between items-center">
         <Link

@@ -3,8 +3,8 @@
 import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { BeatLoader } from "react-spinners";
 import { createUser } from "@/actions/post/user";
+import SubmitButton from "@/components/SubmitButton";
 
 const CreateUserForm = () => {
   const router = useRouter();
@@ -99,12 +99,7 @@ const CreateUserForm = () => {
         </div>
       )}
 
-      <button
-        type="submit"
-        className="w-full mt-3 p-3 rounded shadow font-bold cursor-pointer text-white bg-yale-blue hover:bg-stormy-teal focus:ring-2 focus:ring-offset-2 focus:ring-stormy-teal uppercase flex justify-center items-center"
-      >
-        {isPending ? <BeatLoader color="#45d7b6" size={20} /> : "Valider"}
-      </button>
+      <SubmitButton isPending={isPending} />
     </form>
   );
 };
