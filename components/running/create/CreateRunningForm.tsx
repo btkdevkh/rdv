@@ -14,7 +14,7 @@ export default function CreateRunningForm() {
 
   useEffect(() => {
     if (state.success) {
-      setTimeout(() => router.push("/dashboard/running"), 1000);
+      setTimeout(() => router.push("/dashboard/running?order=1"), 1000);
     }
   }, [state.success]);
 

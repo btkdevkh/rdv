@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { IoMdAdd } from "react-icons/io";
 
 type CreateButtonProps = {
   page: string;
@@ -11,10 +12,11 @@ const CreateButton = ({ page }: CreateButtonProps) => {
 
   return (
     <button
-      className="bg-stormy-teal py-2 px-4 rounded font-semibold cursor-pointer uppercase"
+      className="bg-stormy-teal flex items-center gap-1 py-2 px-4 rounded font-semibold cursor-pointer uppercase"
       onClick={() => router.push(`/dashboard/${page}/create`)}
     >
-      Créer
+      <IoMdAdd size={20} />
+      <span>Créer</span>
     </button>
   );
 };

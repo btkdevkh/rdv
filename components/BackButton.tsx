@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 type BackButtonProps = {
   url?: string;
@@ -11,10 +12,11 @@ const BackButton = ({ url }: BackButtonProps) => {
 
   return (
     <button
-      className="bg-stormy-teal py-2 px-4 rounded font-semibold cursor-pointer uppercase"
+      className="bg-stormy-teal flex items-center gap-1 py-2 px-4 rounded font-semibold cursor-pointer uppercase"
       onClick={() => router.back()}
     >
-      Retour
+      <IoMdArrowRoundBack size={20} />
+      <span>Retour</span>
     </button>
   );
 };

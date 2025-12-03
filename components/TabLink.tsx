@@ -16,7 +16,7 @@ const TabLink = ({ url, title }: TabLinkProps) => {
   return (
     <Link
       href={url}
-      className={`font-semibold uppercase border-b-3 border-white ${
+      className={`font-semibold uppercase border-b-3 border-white rounded ${
         pathname === url || `${pathname}?order=${order}` === url
           ? "bg-graphite"
           : "bg-[#979696]"
