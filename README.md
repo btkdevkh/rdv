@@ -38,7 +38,7 @@ Un SaaS de gestionnnaire d'utilités développée avec Next.js et TypeScript.
 
 ## Installation
 
-Créer un fichier `.env.local` et `.env.prod` avec les variables ci-dessous
+Créer un fichier `.env` avec les variables ci-dessous
 
 ```bash
 DATABASE_URL="url_bdd"

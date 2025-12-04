@@ -8,10 +8,6 @@ services:
     build: .
     restart: always
     container_name: daily_saas
-    environment:
-      POSTGRES_USER: "${POSTGRES_USER}"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      POSTGRES_DB: "${POSTGRES_DB}"
     ports:
       - "3000:3000"
     depends_on:
@@ -20,6 +16,10 @@ services:
     image: postgres
     restart: always
     container_name: daily_saas_db
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
     volumes:
       - dbdata:/var/lib/postgresql
 
