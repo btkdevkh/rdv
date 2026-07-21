@@ -1,6 +1,6 @@
-import Constants, {ExecutionEnvironment} from "expo-constants";
 import {Platform} from "react-native";
 import {formatRelativeDateTime} from "@/utils/date";
+import {isExpoGo} from "@/lib/runtime";
 import type {Appointment} from "./types";
 
 /**
@@ -15,19 +15,14 @@ const REMINDER_LEAD_MINUTES = 30;
 
 const ANDROID_CHANNEL_ID = "rendez-vous";
 
-/**
- * Expo Go dropped notification support on Android in SDK 53, and
- * expo-notifications throws on import there. Loading it lazily behind this flag
- * keeps Expo Go usable for everything else — reminders simply do nothing until
- * you run a development build.
- */
-const isExpoGo =
-  Constants.executionEnvironment === ExecutionEnvironment.StoreClient;
-
 type NotificationsModule = typeof import("expo-notifications");
 
 let notifications: NotificationsModule | null = null;
 
+/**
+ * expo-notifications throws on import in Expo Go, so it is loaded lazily behind
+ * that check — Expo Go stays usable and reminders simply do nothing there.
+ */
 function getNotifications(): NotificationsModule | null {
   if (isExpoGo) return null;
   if (!notifications) {
