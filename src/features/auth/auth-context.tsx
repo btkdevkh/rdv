@@ -50,8 +50,19 @@ function oauthRedirectUri(): string {
  * is not worth relying on. Handles the query arriving after `?` or `#`.
  */
 function callbackParams(url: string): URLSearchParams {
-  const start = url.search(/[?#]/);
-  return new URLSearchParams(start === -1 ? "" : url.slice(start + 1));
+  const queryStart = url.indexOf("?");
+  if (queryStart !== -1) {
+    const rest = url.slice(queryStart + 1);
+    // Appwrite ends the callback with a bare "#". Without cutting there, the
+    // last parameter swallows it and Appwrite rejects the userId.
+    const fragment = rest.indexOf("#");
+    return new URLSearchParams(
+      fragment === -1 ? rest : rest.slice(0, fragment),
+    );
+  }
+
+  const hashStart = url.indexOf("#");
+  return new URLSearchParams(hashStart === -1 ? "" : url.slice(hashStart + 1));
 }
 
 export function AuthProvider({children}: PropsWithChildren) {
