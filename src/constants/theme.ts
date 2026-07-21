@@ -51,6 +51,7 @@ export const FontSize = {
   md: 16,
   lg: 18,
   xl: 24,
+  xxl: 28,
   title: 33,
 } as const;
 

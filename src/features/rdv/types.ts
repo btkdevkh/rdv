@@ -1,4 +1,5 @@
 import type {Models} from "react-native-appwrite";
+import {isToday, isTomorrow} from "@/utils/date";
 
 export const AppointmentStatus = {
   Pending: "pending",
@@ -56,6 +57,18 @@ export function isLate(appointment: Appointment, now: Date): boolean {
 /** Still pending, and its time has not passed. */
 export function isUpcoming(appointment: Appointment, now: Date): boolean {
   return !isDone(appointment) && !isLate(appointment, now);
+}
+
+/**
+ * What the bell surfaces: upcoming appointments happening today or tomorrow.
+ * Deliberately narrower than "upcoming" — the web version shows 3 à venir in
+ * the summary but a badge of 2, because the third is further out.
+ */
+export function isSoon(appointment: Appointment, now: Date): boolean {
+  if (!isUpcoming(appointment, now)) return false;
+  return (
+    isToday(appointment.startsAt, now) || isTomorrow(appointment.startsAt, now)
+  );
 }
 
 export function matchesFilter(

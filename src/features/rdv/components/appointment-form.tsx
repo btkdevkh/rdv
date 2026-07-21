@@ -151,6 +151,16 @@ export default function AppointmentForm({
           onPress={handleSubmit}
           disabled={!canSubmit}
           isLoading={isSubmitting}
+          // "+ Ajouter" when creating; plain "Enregistrer" when editing.
+          icon={
+            initialValue ? undefined : (
+              <Feather
+                name="plus"
+                size={IconSize.md}
+                color={Colors.onPrimary}
+              />
+            )
+          }
           style={styles.submit}
         />
       </View>
