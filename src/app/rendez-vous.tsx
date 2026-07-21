@@ -12,6 +12,7 @@ import {Redirect, useRouter} from "expo-router";
 import {SafeAreaView} from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Button from "@/components/button";
 import {
   Colors,
@@ -30,7 +31,7 @@ import UpcomingBell from "@/features/rdv/components/upcoming-bell";
 import {
   AppointmentFilter,
   countByFilter,
-  isUpcoming,
+  isSoon,
   matchesFilter,
   type Appointment,
 } from "@/features/rdv/types";
@@ -63,8 +64,8 @@ export default function AppointmentsScreen() {
     [appointments, now],
   );
 
-  const upcoming = useMemo(
-    () => appointments.filter(a => isUpcoming(a, now)),
+  const soon = useMemo(
+    () => appointments.filter(a => isSoon(a, now)),
     [appointments, now],
   );
 
@@ -106,8 +107,12 @@ export default function AppointmentsScreen() {
             <Text style={styles.brandTitle}>Rendez-vous</Text>
           </View>
 
+          {/*
+            The web header also shows the user's full name. There is no room for
+            it beside the title on a phone, so the avatar carries identity alone.
+          */}
           <View style={styles.headerActions}>
-            <UpcomingBell upcoming={upcoming} now={now} />
+            <UpcomingBell soon={soon} now={now} />
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>
                 {initialsOf(user.name || user.email)}
@@ -117,8 +122,10 @@ export default function AppointmentsScreen() {
               onPress={() => signOut()}
               accessibilityRole="button"
               accessibilityLabel="Se déconnecter"
-              hitSlop={Spacing.sm}
-              style={styles.signOut}>
+              style={({pressed}) => [
+                styles.iconButton,
+                pressed && styles.pressed,
+              ]}>
               <Feather name="log-out" size={IconSize.md} color={Colors.text} />
             </Pressable>
           </View>
@@ -141,8 +148,8 @@ export default function AppointmentsScreen() {
             variant="secondary"
             onPress={() => setIsOldestFirst(current => !current)}
             icon={
-              <Feather
-                name={isOldestFirst ? "arrow-down" : "arrow-up"}
+              <MaterialCommunityIcons
+                name="swap-vertical"
                 size={IconSize.md}
                 color={Colors.text}
               />
@@ -219,7 +226,7 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   brandTitle: {
-    fontSize: FontSize.xl,
+    fontSize: FontSize.xxl,
     fontWeight: FontWeight.bold,
     color: Colors.text,
   },
@@ -241,8 +248,19 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xs,
     fontWeight: FontWeight.bold,
   },
-  signOut: {
-    padding: Spacing.sm,
+  /** Bordered white square, matching the bell and the web header buttons. */
+  iconButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.md,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   summary: {
     fontSize: FontSize.sm,

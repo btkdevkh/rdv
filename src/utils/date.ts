@@ -33,7 +33,7 @@ export function isToday(iso: string, now: Date): boolean {
   return isSameDay(new Date(iso), now);
 }
 
-function isTomorrow(iso: string, now: Date): boolean {
+export function isTomorrow(iso: string, now: Date): boolean {
   const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
   return isSameDay(new Date(iso), tomorrow);
