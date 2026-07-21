@@ -11,6 +11,15 @@ module.exports = defineConfig([
     ignores: ["dist/*", "node_modules/*", ".expo/*"],
   },
   {
+    // Build tooling runs in Node, not React Native.
+    files: ["scripts/**/*.mjs", "*.config.js"],
+    languageOptions: {globals: {...require("globals").node}},
+  },
+  {
+    // Scoped to TypeScript: the @typescript-eslint plugin is only registered
+    // for these files, so applying its rules globally errors out the moment a
+    // plain .js or .mjs file is linted.
+    files: ["**/*.ts", "**/*.tsx"],
     rules: {
       // Keep imports honest — unused ones are almost always a leftover.
       "no-unused-vars": "off",
@@ -21,7 +30,13 @@ module.exports = defineConfig([
       // `export const X = {...} as const` next to `export type X = ...` is the
       // enum pattern we use throughout; the redeclare warning is a false positive.
       "@typescript-eslint/no-redeclare": "off",
-      // Raw colours and one-off spacing belong in src/constants/theme.ts.
+    },
+  },
+  {
+    // Raw colours belong in src/constants/theme.ts.
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["src/constants/theme.ts"],
+    rules: {
       "no-restricted-syntax": [
         "warn",
         {
@@ -31,10 +46,5 @@ module.exports = defineConfig([
         },
       ],
     },
-  },
-  {
-    // The theme file is where the raw values are allowed to live.
-    files: ["src/constants/theme.ts"],
-    rules: {"no-restricted-syntax": "off"},
   },
 ]);

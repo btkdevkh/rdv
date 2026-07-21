@@ -1,0 +1,30 @@
+<!--
+  The Rendez-vous mark: a calendar glyph, drawn to sit on a 1024×1024 canvas.
+
+  This is the source of truth for every app icon. Edit it, then regenerate the
+  PNGs with `npm run icons` — do not hand-edit the generated files.
+
+  The glyph is drawn in accent green so this file previews correctly on its
+  own. The generator swaps that hex for white wherever the mark sits on a
+  coloured field (launcher icon, favicon, Android monochrome).
+-->
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hangers -->
+  <rect x="316" y="150" width="58" height="130" rx="29" fill="#3ECB9C"/>
+  <rect x="650" y="150" width="58" height="130" rx="29" fill="#3ECB9C"/>
+
+  <!-- Body outline -->
+  <rect x="172" y="212" width="680" height="662" rx="96" stroke="#3ECB9C" stroke-width="62"/>
+
+  <!-- Header rule -->
+  <path d="M172 420H852" stroke="#3ECB9C" stroke-width="62"/>
+
+  <!-- Day grid -->
+  <g fill="#3ECB9C">
+    <rect x="286" y="530" width="76" height="76" rx="24"/>
+    <rect x="474" y="530" width="76" height="76" rx="24"/>
+    <rect x="662" y="530" width="76" height="76" rx="24"/>
+    <rect x="286" y="678" width="76" height="76" rx="24"/>
+    <rect x="474" y="678" width="76" height="76" rx="24"/>
+  </g>
+</svg>
