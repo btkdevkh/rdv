@@ -50,16 +50,26 @@ git checkout -b feature/upcoming-bell-badge
 | `fix/*`     | Bug fix. Same flow.                                         |
 | `hotfix/*`  | Urgent production fix. Cut from `main`, merged to **both**. |
 
-`main` is not a stale release marker — once work lands in `develop` and is
-verified, merge `develop` into `main` so the two stay level:
+`main` is not a stale release marker — it is kept level with `develop`. But it
+is never merged locally: **every push to `develop` opens a pull request into
+`main`.**
 
 ```bash
-git checkout main
-git merge --no-ff develop
-git checkout develop          # go straight back; never work on main
+git checkout develop
+git merge --no-ff feature/whatever
+git push origin develop
+gh pr create --base main --head develop --title "…" --body "…"
 ```
 
-`develop` is the branch you sit on between tasks.
+If a PR from `develop` into `main` is already open, pushing to `develop`
+updates it — do not open a second one. Check first:
+
+```bash
+gh pr list --base main --head develop
+```
+
+`develop` is the branch you sit on between tasks. Never commit to `main`, and
+never fast-forward it by hand; it only ever moves by merging a PR.
 
 Name branches after the change, kebab-case: `feature/appointment-search`,
 `fix/timezone-offset`. One concern per branch — if a branch needs "and" to
