@@ -55,6 +55,7 @@ export default function Button({
               variant === "primary"
                 ? styles.primaryLabel
                 : styles.secondaryLabel,
+              isDisabled && styles.disabledLabel,
             ]}>
             {label}
           </Text>
@@ -86,8 +87,16 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.8,
   },
+  /**
+   * A flat grey fill, not blanket opacity — fading the black primary fill over
+   * a light page turns it into a heavy muddy slab.
+   */
   disabled: {
-    opacity: 0.4,
+    backgroundColor: Colors.neutralSurface,
+    borderColor: Colors.border,
+  },
+  disabledLabel: {
+    color: Colors.textDisabled,
   },
   label: {
     fontSize: FontSize.md,

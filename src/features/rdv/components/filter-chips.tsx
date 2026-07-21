@@ -28,6 +28,9 @@ export default function FilterChips({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      // The grey track is the container, not the scroll view, so it keeps its
+      // rounded ends instead of stretching with the scrollable content.
+      style={styles.track}
       contentContainerStyle={styles.row}>
       {FILTER_ORDER.map(filter => {
         const isActive = filter === value;
@@ -50,6 +53,12 @@ export default function FilterChips({
 }
 
 const styles = StyleSheet.create({
+  track: {
+    flexGrow: 0,
+    alignSelf: "flex-start",
+    backgroundColor: Colors.neutralSurface,
+    borderRadius: Radius.md,
+  },
   row: {
     flexDirection: "row",
     gap: Spacing.xs,
@@ -58,7 +67,7 @@ const styles = StyleSheet.create({
   chip: {
     paddingVertical: Spacing.sm,
     paddingHorizontal: Spacing.lg,
-    borderRadius: Radius.md,
+    borderRadius: Radius.sm,
   },
   chipActive: {
     backgroundColor: Colors.primary,

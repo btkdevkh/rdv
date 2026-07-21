@@ -1,56 +1,119 @@
-# Welcome to your Expo app 👋
+# Rendez-vous
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile app for planning, tracking and managing personal appointments —
+*planifiez, suivez et gérez tous vos rendez-vous au même endroit*.
 
-## Get started
+Sign in with Google, add your appointments, and see at a glance what is coming
+up, what is happening today, and what you have let slip. The interface is in
+French.
 
-1. Install dependencies
+<p align="center">
+  <img src="context/screenshots/mobile/main.png" alt="Rendez-vous running on Android" width="360">
+</p>
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+- **Google sign-in**, backed by Appwrite accounts
+- **Appointments** with a title, date, time and free-text notes
+- **Derived status** — `À venir`, `Aujourd'hui`, `En retard` and `Terminé` are
+  computed from the date and completion state, so a pending appointment slips
+  into "en retard" on its own as time passes
+- **Filter and sort** by status, oldest or newest first
+- **Upcoming bell** showing what is due today and tomorrow
+- **Local reminders** 30 minutes before each appointment, scheduled on-device
+  so they fire offline
 
-   ```bash
-   npx expo start
-   ```
+## Screenshots
 
-In the output, you'll find options to open the app in a
+| Sign in | Appointments |
+| :-----: | :----------: |
+| <img src="context/screenshots/mobile/login.png" width="240"> | <img src="context/screenshots/mobile/list.png" width="240"> |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| New appointment | Upcoming |
+| :-------------: | :------: |
+| <img src="context/screenshots/mobile/dialog.png" width="240"> | <img src="context/screenshots/mobile/bell.png" width="240"> |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Stack
 
-## Get a fresh project
+- [Expo](https://expo.dev) SDK 57 with [expo-router](https://docs.expo.dev/router/introduction/)
+  file-based routing
+- React Native 0.86, React 19, TypeScript in strict mode
+- [Appwrite](https://appwrite.io) Cloud for auth and data
+- React Compiler and typed routes enabled
 
-When you're ready, run:
+## Getting started
+
+You need Node 20+, and an Appwrite project with a database.
 
 ```bash
-npm run reset-project
+git clone https://github.com/btkdevkh/rdv.git
+cd rdv
+npm install
+cp .env.example .env     # then fill in your Appwrite IDs
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Press `a` for an Android emulator, `i` for iOS, or scan the QR code with
+[Expo Go](https://expo.dev/go).
 
-### Other setup steps
+**The backend needs setting up first** — registering the platform, enabling
+Google OAuth, and creating the `appointments` table. That is walked through
+step by step in **[docs/appwrite-setup.md](docs/appwrite-setup.md)**.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+The table schema lives in [`appwrite.config.json`](appwrite.config.json) and is
+applied with the Appwrite CLI rather than clicked together by hand:
 
-## Learn more
+```bash
+npm run appwrite:push
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### Local reminders
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Reminders need a development build — Expo Go dropped Android notification
+support in SDK 53, so they are switched off there automatically.
 
-## Join the community
+```bash
+npx expo run:android
+```
 
-Join our community of developers creating universal apps.
+### Building an installable APK
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npx eas build --platform android --profile preview
+```
+
+## Scripts
+
+| Command             | Purpose                              |
+| ------------------- | ------------------------------------ |
+| `npm start`         | Expo dev server                      |
+| `npm run android`   | Open on a connected Android device   |
+| `npm run ios`       | Open on an iOS simulator             |
+| `npm run web`       | Run in a browser                     |
+| `npm run typecheck` | `tsc --noEmit`                       |
+| `npm run lint`      | ESLint                               |
+| `npm run format`    | Prettier over `src/`                 |
+| `npm run appwrite:push` | Apply the database schema        |
+
+## Project structure
+
+```
+src/app/          Routes. Thin screens — layout and wiring only.
+src/components/   Generic presentational components.
+src/features/     Domain code by feature (auth, rdv): state, repository, types.
+src/hooks/        Shared hooks.
+src/constants/    Design tokens and environment config.
+src/lib/          Appwrite client.
+src/utils/        Pure helpers.
+```
+
+## Contributing
+
+Conventions, the branching model and the design rules live in
+**[AGENTS.md](AGENTS.md)**. In short: branch from `develop`, keep `npm run
+typecheck` and `npm run lint` green, and check any UI work against the web
+design in `context/screenshots/web/`.
+
+## Licence
+
+MIT — see [LICENSE](LICENSE).

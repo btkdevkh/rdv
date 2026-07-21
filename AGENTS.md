@@ -5,10 +5,24 @@ appointments. Expo SDK 57 + expo-router, Appwrite as the backend.
 
 ## Match the web app
 
-`context/screenshots/` holds the current web version. **Look at it before
-designing any screen, component or column** — this app is a port, not a
-redesign. Deviate only where a mobile idiom demands it (modal routes instead of
-dialogs, a bottom-anchored popover instead of a dropdown).
+`context/screenshots/web/` is **the spec**. This app is a port, not a redesign —
+look there before designing any screen, component or column, and treat it as
+authoritative when the two disagree. Do not edit or replace those images.
+
+`context/screenshots/mobile/` is **evidence**: what the app actually looks like
+right now, captured from an emulator. Refresh it when the UI changes
+meaningfully. It records the current state; it never defines the target.
+
+Deviating from the web design is allowed where a mobile idiom demands it — modal
+routes instead of dialogs, the user's name dropped from the header for want of
+width — but say so in a comment and in the commit message, so the difference
+reads as a decision rather than an oversight.
+
+To recapture (emulator running, app on the screen you want):
+
+```bash
+adb exec-out screencap -p > context/screenshots/mobile/list.png
+```
 
 ## Expo HAS CHANGED
 
@@ -16,6 +30,44 @@ Read the exact versioned docs at https://docs.expo.dev/versions/v57.0.0/ before
 writing any code. Do not rely on remembered API shapes — SDK 56 removed direct
 `@react-navigation/*` imports, and several Expo and Appwrite APIs moved to
 object-parameter form.
+
+## Branching
+
+**Never commit directly to `main` or `develop`.** Every change starts on its own
+branch cut from `develop`:
+
+```bash
+git checkout develop
+git pull                      # once a remote exists
+git checkout -b feature/upcoming-bell-badge
+```
+
+| Branch      | Role                                                        |
+| ----------- | ----------------------------------------------------------- |
+| `main`      | Kept up to date. Only ever receives merges from `develop`.  |
+| `develop`   | Where work lives. Feature branches merge here.              |
+| `feature/*` | One feature or refactor. Cut from `develop`, merged back.   |
+| `fix/*`     | Bug fix. Same flow.                                         |
+| `hotfix/*`  | Urgent production fix. Cut from `main`, merged to **both**. |
+
+`main` is not a stale release marker — once work lands in `develop` and is
+verified, merge `develop` into `main` so the two stay level:
+
+```bash
+git checkout main
+git merge --no-ff develop
+git checkout develop          # go straight back; never work on main
+```
+
+`develop` is the branch you sit on between tasks.
+
+Name branches after the change, kebab-case: `feature/appointment-search`,
+`fix/timezone-offset`. One concern per branch — if a branch needs "and" to
+describe it, split it.
+
+Before merging back into `develop`: `npm run typecheck` and `npm run lint` must
+both pass, and the app must run. `hotfix/*` merges into `main` **and**
+`develop`, otherwise the fix is lost at the next release.
 
 ## Commands
 

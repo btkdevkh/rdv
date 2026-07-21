@@ -13,31 +13,31 @@ import {
 import {formatRelativeDateTime} from "@/utils/date";
 import type {Appointment} from "../types";
 
-/** How many of the next appointments the popover lists. */
-const PREVIEW_COUNT = 2;
-
 type UpcomingBellProps = {
-  /** Upcoming appointments, already sorted by date ascending. */
-  upcoming: Appointment[];
+  /**
+   * Appointments happening today or tomorrow, sorted ascending. Narrower than
+   * "à venir" on purpose — the badge counts these, not every future
+   * appointment, which is why the web header can read "3 à venir" beside a
+   * badge of 2.
+   */
+  soon: Appointment[];
   now: Date;
 };
 
-export default function UpcomingBell({upcoming, now}: UpcomingBellProps) {
+export default function UpcomingBell({soon, now}: UpcomingBellProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const preview = upcoming.slice(0, PREVIEW_COUNT);
 
   return (
     <>
       <Pressable
         onPress={() => setIsOpen(true)}
         accessibilityRole="button"
-        accessibilityLabel={`Prochains rendez-vous, ${upcoming.length}`}
-        hitSlop={Spacing.sm}
-        style={styles.bellButton}>
-        <Feather name="bell" size={IconSize.lg} color={Colors.text} />
-        {upcoming.length > 0 && (
+        accessibilityLabel={`Prochains rendez-vous, ${soon.length}`}
+        style={({pressed}) => [styles.bellButton, pressed && styles.pressed]}>
+        <Feather name="bell" size={IconSize.md} color={Colors.text} />
+        {soon.length > 0 && (
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{upcoming.length}</Text>
+            <Text style={styles.badgeText}>{soon.length}</Text>
           </View>
         )}
       </Pressable>
@@ -52,10 +52,10 @@ export default function UpcomingBell({upcoming, now}: UpcomingBellProps) {
           <Pressable style={styles.popover}>
             <Text style={styles.heading}>PROCHAINS RENDEZ-VOUS</Text>
 
-            {preview.length === 0 ? (
+            {soon.length === 0 ? (
               <Text style={styles.empty}>Aucun rendez-vous à venir.</Text>
             ) : (
-              preview.map(appointment => (
+              soon.map(appointment => (
                 <View key={appointment.$id} style={styles.item}>
                   <Text style={styles.itemTitle} numberOfLines={1}>
                     {appointment.title}
@@ -82,12 +82,22 @@ export default function UpcomingBell({upcoming, now}: UpcomingBellProps) {
 
 const styles = StyleSheet.create({
   bellButton: {
-    padding: Spacing.sm,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Colors.card,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.md,
+  },
+  pressed: {
+    opacity: 0.6,
   },
   badge: {
     position: "absolute",
-    top: 0,
-    right: 0,
+    top: -6,
+    right: -6,
     minWidth: 18,
     height: 18,
     paddingHorizontal: 5,
