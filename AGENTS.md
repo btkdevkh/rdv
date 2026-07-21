@@ -17,6 +17,33 @@ writing any code. Do not rely on remembered API shapes — SDK 56 removed direct
 `@react-navigation/*` imports, and several Expo and Appwrite APIs moved to
 object-parameter form.
 
+## Branching
+
+**Never commit directly to `main` or `develop`.** Every change starts on its own
+branch cut from `develop`:
+
+```bash
+git checkout develop
+git pull                      # once a remote exists
+git checkout -b feature/upcoming-bell-badge
+```
+
+| Branch      | Role                                                        |
+| ----------- | ----------------------------------------------------------- |
+| `main`      | Released. Only ever receives merges from `develop`.         |
+| `develop`   | Integration branch. Feature branches merge here.            |
+| `feature/*` | One feature or refactor. Cut from `develop`, merged back.   |
+| `fix/*`     | Bug fix. Same flow.                                         |
+| `hotfix/*`  | Urgent production fix. Cut from `main`, merged to **both**. |
+
+Name branches after the change, kebab-case: `feature/appointment-search`,
+`fix/timezone-offset`. One concern per branch — if a branch needs "and" to
+describe it, split it.
+
+Before merging back into `develop`: `npm run typecheck` and `npm run lint` must
+both pass, and the app must run. `hotfix/*` merges into `main` **and**
+`develop`, otherwise the fix is lost at the next release.
+
 ## Commands
 
 | Command             | Purpose                                      |
