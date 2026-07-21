@@ -44,11 +44,22 @@ git checkout -b feature/upcoming-bell-badge
 
 | Branch      | Role                                                        |
 | ----------- | ----------------------------------------------------------- |
-| `main`      | Released. Only ever receives merges from `develop`.         |
-| `develop`   | Integration branch. Feature branches merge here.            |
+| `main`      | Kept up to date. Only ever receives merges from `develop`.  |
+| `develop`   | Where work lives. Feature branches merge here.              |
 | `feature/*` | One feature or refactor. Cut from `develop`, merged back.   |
 | `fix/*`     | Bug fix. Same flow.                                         |
 | `hotfix/*`  | Urgent production fix. Cut from `main`, merged to **both**. |
+
+`main` is not a stale release marker — once work lands in `develop` and is
+verified, merge `develop` into `main` so the two stay level:
+
+```bash
+git checkout main
+git merge --no-ff develop
+git checkout develop          # go straight back; never work on main
+```
+
+`develop` is the branch you sit on between tasks.
 
 Name branches after the change, kebab-case: `feature/appointment-search`,
 `fix/timezone-offset`. One concern per branch — if a branch needs "and" to
