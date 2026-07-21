@@ -9,6 +9,13 @@ appointments. Expo SDK 57 + expo-router, Appwrite as the backend.
 look there before designing any screen, component or column, and treat it as
 authoritative when the two disagree. Do not edit or replace those images.
 
+The web version is a **design reference only, not a data peer.** It runs on its
+own Neon/Postgres backend; this app owns its data in Appwrite, and the two are
+never expected to hold the same appointments. Do not build syncing between
+them, and do not treat "an appointment added on the web does not reach the
+phone" as a bug — that is why local reminders are sufficient and server-driven
+push has no job to do here.
+
 `context/screenshots/mobile/` is **evidence**: what the app actually looks like
 right now, captured from an emulator. Refresh it when the UI changes
 meaningfully. It records the current state; it never defines the target.
