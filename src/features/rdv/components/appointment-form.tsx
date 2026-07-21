@@ -152,12 +152,14 @@ export default function AppointmentForm({
           disabled={!canSubmit}
           isLoading={isSubmitting}
           // "+ Ajouter" when creating; plain "Enregistrer" when editing.
+          // The icon colour has to track the disabled state itself, since
+          // Button cannot restyle an element handed to it.
           icon={
             initialValue ? undefined : (
               <Feather
                 name="plus"
                 size={IconSize.md}
-                color={Colors.onPrimary}
+                color={canSubmit ? Colors.onPrimary : Colors.textDisabled}
               />
             )
           }

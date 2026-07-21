@@ -70,20 +70,24 @@ export default function LoginScreen() {
       <View style={styles.features}>
         {FEATURES.map(feature => (
           <View key={feature.label} style={styles.featureRow}>
-            <AntDesign
-              name={feature.icon}
-              size={IconSize.md}
-              color={Colors.accent}
-            />
+            <View style={styles.featureIcon}>
+              <AntDesign
+                name={feature.icon}
+                size={IconSize.md}
+                color={Colors.accent}
+              />
+            </View>
             <Text style={styles.featureLabel}>{feature.label}</Text>
           </View>
         ))}
         <View style={styles.featureRow}>
-          <FontAwesome5
-            name="calendar-alt"
-            size={IconSize.md}
-            color={Colors.accent}
-          />
+          <View style={styles.featureIcon}>
+            <FontAwesome5
+              name="calendar-alt"
+              size={IconSize.md}
+              color={Colors.accent}
+            />
+          </View>
           <Text style={styles.featureLabel}>
             {"Repérez d'un coup d'œil ceux en retard"}
           </Text>
@@ -140,6 +144,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.md,
+  },
+  /**
+   * The rows mix AntDesign and FontAwesome5 glyphs, whose intrinsic widths
+   * differ. A fixed box keeps every label starting at the same x.
+   */
+  featureIcon: {
+    width: IconSize.lg,
+    alignItems: "center",
   },
   featureLabel: {
     fontSize: FontSize.sm,
