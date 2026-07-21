@@ -34,13 +34,18 @@ object-parameter form.
 ## Branching
 
 **Never commit directly to `main` or `develop`.** Every change starts on its own
-branch cut from `develop`:
+branch cut from `develop` — always `develop`, never `main`, and never another
+feature branch:
 
 ```bash
 git checkout develop
-git pull                      # once a remote exists
+git pull                      # develop must be current before branching
 git checkout -b feature/upcoming-bell-badge
 ```
+
+Branching from a stale `develop` is how a merge conflict gets manufactured out
+of nothing. `hotfix/*` is the sole exception: it comes off `main`, because the
+point is to skip whatever is sitting unreleased in `develop`.
 
 | Branch      | Role                                                        |
 | ----------- | ----------------------------------------------------------- |
