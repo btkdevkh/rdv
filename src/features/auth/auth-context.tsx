@@ -11,6 +11,8 @@ import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
 import {OAuthProvider, type Models} from "react-native-appwrite";
 import {account} from "@/lib/appwrite";
+import {isExpoGo} from "@/lib/runtime";
+import {AppwriteConfig} from "@/constants/config";
 
 type AuthContextValue = {
   user: Models.User<Models.Preferences> | null;
@@ -21,6 +23,36 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+
+/**
+ * Where Appwrite sends the browser back to after Google signs the user in.
+ *
+ * Appwrite validates this against the platforms registered on the project and
+ * rejects anything else with "invalid success param". For a real build the only
+ * accepted form is `appwrite-callback-<PROJECT_ID>://`, which is why that scheme
+ * is registered alongside `rdv` in app.json.
+ *
+ * Expo Go cannot receive a custom scheme — links arrive over `exp://` — so it
+ * keeps using the URL expo-linking derives for the dev server.
+ */
+function oauthRedirectUri(): string {
+  return isExpoGo
+    ? Linking.createURL("/")
+    : `appwrite-callback-${AppwriteConfig.projectId}://`;
+}
+
+/**
+ * Pulls userId and secret off the callback URL.
+ *
+ * Read by hand rather than through `new URL()`: the returned link uses a custom
+ * scheme with an empty host (`appwrite-callback-rdv-app://?userId=…`), and URL
+ * parsing of non-special schemes is inconsistent enough across engines that it
+ * is not worth relying on. Handles the query arriving after `?` or `#`.
+ */
+function callbackParams(url: string): URLSearchParams {
+  const start = url.search(/[?#]/);
+  return new URLSearchParams(start === -1 ? "" : url.slice(start + 1));
+}
 
 export function AuthProvider({children}: PropsWithChildren) {
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
@@ -45,7 +77,7 @@ export function AuthProvider({children}: PropsWithChildren) {
   }, [refresh]);
 
   const signInWithGoogle = useCallback(async () => {
-    const redirectUri = Linking.createURL("/");
+    const redirectUri = oauthRedirectUri();
 
     const loginUrl = account.createOAuth2Token({
       provider: OAuthProvider.Google,
@@ -65,7 +97,7 @@ export function AuthProvider({children}: PropsWithChildren) {
       return;
     }
 
-    const params = new URL(result.url).searchParams;
+    const params = callbackParams(result.url);
     const userId = params.get("userId");
     const secret = params.get("secret");
     if (!userId || !secret) {
