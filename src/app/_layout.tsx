@@ -1,18 +1,42 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import {Stack} from "expo-router";
+import {StatusBar} from "expo-status-bar";
+import {SafeAreaProvider} from "react-native-safe-area-context";
+import {AuthProvider} from "@/features/auth/auth-context";
+import {AppointmentsProvider} from "@/features/rdv/appointments-context";
+import {Colors} from "@/constants/theme";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
-
-SplashScreen.preventAutoHideAsync();
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <AppointmentsProvider>
+          <StatusBar style="dark" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: {backgroundColor: Colors.background},
+            }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="rendez-vous" />
+            <Stack.Screen
+              name="rdv/new"
+              options={{
+                presentation: "modal",
+                headerShown: true,
+                title: "Nouveau rendez-vous",
+              }}
+            />
+            <Stack.Screen
+              name="rdv/[id]"
+              options={{
+                presentation: "modal",
+                headerShown: true,
+                title: "Modifier le rendez-vous",
+              }}
+            />
+          </Stack>
+        </AppointmentsProvider>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

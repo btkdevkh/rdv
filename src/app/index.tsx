@@ -1,98 +1,153 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {useState} from "react";
+import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
+import {Redirect} from "expo-router";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import Button from "@/components/button";
+import {
+  Colors,
+  FontSize,
+  FontWeight,
+  IconSize,
+  Radius,
+  Spacing,
+} from "@/constants/theme";
+import {useAuth} from "@/features/auth/auth-context";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+const FEATURES = [
+  {icon: "clock-circle", label: "Vos rendez-vous à venir, triés par date"},
+  {icon: "check-circle", label: "Marquez-les comme terminés en un clic"},
+] as const;
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
+export default function LoginScreen() {
+  const {user, isLoading, signInWithGoogle} = useAuth();
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  if (isLoading) {
     return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
+      <View style={styles.container}>
+        <ActivityIndicator color={Colors.accent} />
+      </View>
     );
   }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+
+  if (user) {
+    return <Redirect href="/rendez-vous" />;
+  }
+
+  const handleSignIn = async () => {
+    setIsSigningIn(true);
+    setError(null);
+    try {
+      await signInWithGoogle();
+    } catch (caught) {
+      setError(
+        caught instanceof Error ? caught.message : "La connexion a échoué.",
+      );
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+    <View style={styles.container}>
+      <View style={styles.logo}>
+        <FontAwesome5
+          name="calendar-alt"
+          size={IconSize.xl}
+          color={Colors.accent}
+        />
+      </View>
 
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+      <Text style={styles.title}>Rendez-vous</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <Text style={styles.intro}>
+        Planifiez, suivez et gérez tous vos rendez-vous au même endroit.
+        Connectez-vous pour retrouver les vôtres.
+      </Text>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
+      <View style={styles.features}>
+        {FEATURES.map(feature => (
+          <View key={feature.label} style={styles.featureRow}>
+            <AntDesign
+              name={feature.icon}
+              size={IconSize.md}
+              color={Colors.accent}
+            />
+            <Text style={styles.featureLabel}>{feature.label}</Text>
+          </View>
+        ))}
+        <View style={styles.featureRow}>
+          <FontAwesome5
+            name="calendar-alt"
+            size={IconSize.md}
+            color={Colors.accent}
           />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          <Text style={styles.featureLabel}>
+            {"Repérez d'un coup d'œil ceux en retard"}
+          </Text>
+        </View>
+      </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      {error && <Text style={styles.error}>{error}</Text>}
+
+      <Button
+        label="Se connecter avec Google"
+        onPress={handleSignIn}
+        isLoading={isSigningIn}
+        icon={
+          <AntDesign
+            name="google"
+            size={IconSize.md}
+            color={Colors.onPrimary}
+          />
+        }
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: "center",
+    gap: Spacing.xl,
+    padding: Spacing.xl,
+    backgroundColor: Colors.background,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+  logo: {
+    padding: Spacing.md,
+    borderRadius: Radius.xl,
+    backgroundColor: Colors.accentSurface,
   },
   title: {
-    textAlign: 'center',
+    fontSize: FontSize.title,
+    fontWeight: FontWeight.bold,
+    color: Colors.text,
   },
-  code: {
-    textTransform: 'uppercase',
+  intro: {
+    textAlign: "center",
+    fontSize: FontSize.md,
+    color: Colors.textMuted,
+    maxWidth: 340,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  features: {
+    gap: Spacing.md,
+  },
+  featureRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.md,
+  },
+  featureLabel: {
+    fontSize: FontSize.sm,
+    color: Colors.textMuted,
+  },
+  error: {
+    fontSize: FontSize.sm,
+    color: Colors.danger,
+    textAlign: "center",
   },
 });
