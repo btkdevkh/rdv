@@ -111,8 +111,9 @@ src/utils/        Pure helpers.
 
 Conventions, the branching model and the design rules live in
 **[AGENTS.md](AGENTS.md)**. In short: branch from `develop`, keep `npm run
-typecheck` and `npm run lint` green, and check any UI work against the web
-design in `context/screenshots/web/`.
+typecheck` and `npm run lint` green, check any UI work against the web design
+in `context/screenshots/web/`, and land changes on `main` through a pull
+request from `develop` rather than a local merge.
 
 ## Licence
 
