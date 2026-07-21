@@ -5,10 +5,24 @@ appointments. Expo SDK 57 + expo-router, Appwrite as the backend.
 
 ## Match the web app
 
-`context/screenshots/` holds the current web version. **Look at it before
-designing any screen, component or column** — this app is a port, not a
-redesign. Deviate only where a mobile idiom demands it (modal routes instead of
-dialogs, a bottom-anchored popover instead of a dropdown).
+`context/screenshots/web/` is **the spec**. This app is a port, not a redesign —
+look there before designing any screen, component or column, and treat it as
+authoritative when the two disagree. Do not edit or replace those images.
+
+`context/screenshots/mobile/` is **evidence**: what the app actually looks like
+right now, captured from an emulator. Refresh it when the UI changes
+meaningfully. It records the current state; it never defines the target.
+
+Deviating from the web design is allowed where a mobile idiom demands it — modal
+routes instead of dialogs, the user's name dropped from the header for want of
+width — but say so in a comment and in the commit message, so the difference
+reads as a decision rather than an oversight.
+
+To recapture (emulator running, app on the screen you want):
+
+```bash
+adb exec-out screencap -p > context/screenshots/mobile/list.png
+```
 
 ## Expo HAS CHANGED
 
