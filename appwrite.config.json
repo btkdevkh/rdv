@@ -1,0 +1,82 @@
+{
+    "projectId": "rdv-app",
+    "projectName": "rdv",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "tablesDB": [
+        {
+            "$id": "rdv-app-db",
+            "name": "rdv-app-db",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "$id": "appointments",
+            "databaseId": "rdv-app-db",
+            "name": "appointments",
+            "enabled": true,
+            "rowSecurity": true,
+            "$permissions": [
+                "create(\"users\")"
+            ],
+            "columns": [
+                {
+                    "key": "title",
+                    "type": "varchar",
+                    "size": 200,
+                    "required": true,
+                    "array": false,
+                    "encrypt": false
+                },
+                {
+                    "key": "notes",
+                    "type": "varchar",
+                    "size": 2000,
+                    "required": false,
+                    "default": "",
+                    "array": false,
+                    "encrypt": false
+                },
+                {
+                    "key": "startsAt",
+                    "type": "datetime",
+                    "required": true,
+                    "array": false
+                },
+                {
+                    "key": "status",
+                    "type": "string",
+                    "format": "enum",
+                    "elements": [
+                        "pending",
+                        "done"
+                    ],
+                    "required": true,
+                    "array": false
+                },
+                {
+                    "key": "userId",
+                    "type": "varchar",
+                    "size": 64,
+                    "required": true,
+                    "array": false,
+                    "encrypt": false
+                }
+            ],
+            "indexes": [
+                {
+                    "key": "user_starts",
+                    "type": "key",
+                    "columns": [
+                        "userId",
+                        "startsAt"
+                    ],
+                    "orders": [
+                        "ASC",
+                        "ASC"
+                    ]
+                }
+            ]
+        }
+    ]
+}
