@@ -103,6 +103,25 @@ Then paste in your endpoint, project ID and database ID from the console.
 > committed and holds only non-secret IDs; if you point `.env` at a different
 > project, change both.
 
+## Builds
+
+`.env` is gitignored, and **EAS Build never uploads gitignored files** — a
+cloud build would start and immediately throw `Missing environment variable`.
+The same values are therefore duplicated into each build profile's `env` block
+in `eas.json`.
+
+Keep the two in sync. They hold only non-secret IDs, which is why committing
+them is fine; the duplication across profiles is deliberate so a future staging
+build can point at a separate Appwrite project.
+
+```bash
+npx eas build --platform android --profile preview   # installable APK
+```
+
+If these ever need to hold a real secret, move them out of `eas.json` and into
+EAS environment variables (`eas env:create`), referenced by an `environment`
+field on the profile.
+
 ## Notifications
 
 Local reminders fire 30 minutes before each appointment
