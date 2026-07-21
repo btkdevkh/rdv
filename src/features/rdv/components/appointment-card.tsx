@@ -55,7 +55,9 @@ export default function AppointmentCard({
 }: AppointmentCardProps) {
   const done = isDone(appointment);
   const late = isLate(appointment, now);
-  const today = !done && isToday(appointment.startsAt, now);
+  // Once something is overdue, "Aujourd'hui" adds nothing and costs a second
+  // badge row on a narrow screen.
+  const today = !done && !late && isToday(appointment.startsAt, now);
 
   return (
     <View style={styles.card}>
