@@ -10,8 +10,16 @@ import type {Appointment} from "./types";
  * `syncReminders` rebuilds the whole schedule on every load.
  */
 
-/** How long before the appointment the reminder fires. */
-const REMINDER_LEAD_MINUTES = 30;
+const HOURS = 60 * 60 * 1000;
+
+/**
+ * How far ahead of an appointment each reminder fires: three days out, the day
+ * before, then three hours before it starts.
+ *
+ * Leads already in the past are skipped, so booking something for this evening
+ * schedules only the 3h reminder rather than firing the others immediately.
+ */
+const REMINDER_LEADS_MS = [3 * 24 * HOURS, 24 * HOURS, 3 * HOURS];
 
 const ANDROID_CHANNEL_ID = "rendez-vous";
 
@@ -67,34 +75,38 @@ export async function ensureNotificationPermission(): Promise<boolean> {
   return request.status === "granted";
 }
 
-function reminderDate(appointment: Appointment): Date {
-  const startsAt = new Date(appointment.startsAt);
-  return new Date(startsAt.getTime() - REMINDER_LEAD_MINUTES * 60_000);
+/** The lead times still ahead of `now`, soonest last. */
+export function reminderDates(appointment: Appointment, now: Date): Date[] {
+  const startsAt = new Date(appointment.startsAt).getTime();
+  return REMINDER_LEADS_MS.map(lead => new Date(startsAt - lead)).filter(
+    fireAt => fireAt > now,
+  );
 }
 
-async function scheduleReminder(
+async function scheduleReminders(
   appointment: Appointment,
   now: Date,
 ): Promise<void> {
   const Notifications = getNotifications();
   if (!Notifications) return;
 
-  const fireAt = reminderDate(appointment);
-  // A reminder whose lead time has already elapsed would fire immediately.
-  if (fireAt <= now) return;
-
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: appointment.title,
-      body: formatRelativeDateTime(appointment.startsAt, now),
-      data: {appointmentId: appointment.$id},
-    },
-    trigger: {
-      type: Notifications.SchedulableTriggerInputTypes.DATE,
-      date: fireAt,
-      ...(Platform.OS === "android" && {channelId: ANDROID_CHANNEL_ID}),
-    },
-  });
+  for (const fireAt of reminderDates(appointment, now)) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: appointment.title,
+        // Phrased against the moment it fires, not the moment it is scheduled,
+        // so the 24h reminder reads "Demain à 11:30" and the 3h one
+        // "Aujourd'hui à 11:30".
+        body: formatRelativeDateTime(appointment.startsAt, fireAt),
+        data: {appointmentId: appointment.$id},
+      },
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.DATE,
+        date: fireAt,
+        ...(Platform.OS === "android" && {channelId: ANDROID_CHANNEL_ID}),
+      },
+    });
+  }
 }
 
 /**
@@ -114,8 +126,12 @@ export async function syncReminders(
 
   await Notifications.cancelAllScheduledNotificationsAsync();
 
+  // iOS keeps at most 64 pending notifications per app and silently drops the
+  // rest. At three leads each that is roughly 21 appointments — fine for now,
+  // but if the list grows, schedule only the nearest few rather than all of
+  // them.
   const pending = appointments.filter(a => a.status === "pending");
-  await Promise.all(pending.map(a => scheduleReminder(a, now)));
+  await Promise.all(pending.map(a => scheduleReminders(a, now)));
 }
 
 export async function clearReminders(): Promise<void> {

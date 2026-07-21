@@ -20,8 +20,8 @@ French.
   into "en retard" on its own as time passes
 - **Filter and sort** by status, oldest or newest first
 - **Upcoming bell** showing what is due today and tomorrow
-- **Local reminders** 30 minutes before each appointment, scheduled on-device
-  so they fire offline
+- **Local reminders** three days, one day and three hours before each
+  appointment, scheduled on-device so they fire offline
 
 ## Screenshots
 

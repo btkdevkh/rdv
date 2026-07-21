@@ -124,8 +124,10 @@ field on the profile.
 
 ## Notifications
 
-Local reminders fire 30 minutes before each appointment
-(`REMINDER_LEAD_MINUTES` in `features/rdv/reminders.ts`).
+Local reminders fire three days, one day and three hours before each
+appointment (`REMINDER_LEADS_MS` in `features/rdv/reminders.ts`). Leads already
+in the past are skipped, so booking something for this evening schedules only
+the three-hour one.
 
 They require a **development build** — Expo Go on Android cannot schedule
 notifications:
