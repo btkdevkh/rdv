@@ -101,10 +101,24 @@ export function AuthProvider({children}: PropsWithChildren) {
     const userId = params.get("userId");
     const secret = params.get("secret");
     if (!userId || !secret) {
-      throw new Error("Connexion Google échouée : réponse incomplète.");
+      // Naming the parameters that did arrive turns "réponse incomplète" into
+      // something diagnosable from a screenshot. Values are left out — one of
+      // them is the session secret.
+      const received = [...params.keys()].join(", ") || "aucun";
+      throw new Error(
+        `Connexion Google échouée : réponse incomplète (paramètres reçus : ${received}).`,
+      );
     }
 
-    await account.createSession({userId, secret});
+    try {
+      await account.createSession({userId, secret});
+    } catch (caught) {
+      // Appwrite validates userId server-side and rejects malformed values.
+      // The id is not sensitive, so echoing it identifies a mangled callback
+      // immediately; the secret is never included.
+      const reason = caught instanceof Error ? caught.message : String(caught);
+      throw new Error(`${reason} — userId reçu : "${userId}"`);
+    }
     await refresh();
   }, [refresh]);
 
